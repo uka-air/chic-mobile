@@ -45,6 +45,10 @@ class AppConfig private constructor(private val context: Context) {
         get() = prefs.getString(KEY_SITE_ID, "") ?: ""
         set(value) = prefs.edit().putString(KEY_SITE_ID, value.trim()).apply()
 
+    var uploadIntervalMinutes: Long
+        get() = prefs.getLong(KEY_UPLOAD_INTERVAL_MINUTES, 15L)
+        set(value) = prefs.edit().putLong(KEY_UPLOAD_INTERVAL_MINUTES, value).apply()
+
     var folderPath: String
         get() = prefs.getString(KEY_FOLDER_PATH, "") ?: ""
         set(value) = prefs.edit().putString(KEY_FOLDER_PATH, value.trim()).apply()
@@ -82,12 +86,7 @@ class AppConfig private constructor(private val context: Context) {
         set(value) = prefs.edit().putInt(KEY_LAST_PENDING_COUNT, value).apply()
 
     fun isConfigValid(): Boolean {
-        return serverBaseUrl.startsWith("https://") &&
-            uploadEndpoint.isNotBlank() &&
-            authToken.isNotBlank() &&
-            deviceId.isNotBlank() &&
-            siteId.isNotBlank() &&
-            folderPath.isNotBlank()
+        return siteId.isNotBlank() && uploadIntervalMinutes >= 15L
     }
 
     companion object {
@@ -100,6 +99,7 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_AUTH_TOKEN = "auth_token"
         private const val KEY_DEVICE_ID = "device_id"
         private const val KEY_SITE_ID = "site_id"
+        private const val KEY_UPLOAD_INTERVAL_MINUTES = "upload_interval_minutes"
         private const val KEY_FOLDER_PATH = "folder_path"
         private const val KEY_EXTENSION_FILTER = "extension_filter"
         private const val KEY_ALLOW_METERED = "allow_metered"

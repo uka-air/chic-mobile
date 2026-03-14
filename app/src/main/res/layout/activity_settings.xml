@@ -10,64 +10,19 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/edtServerBaseUrl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Server base URL (https://...)" />
-
-        <EditText
-            android:id="@+id/edtUploadEndpoint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Upload endpoint (api/upload)" />
-
-        <EditText
-            android:id="@+id/edtToken"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="API key / Auth token" />
-
-        <EditText
-            android:id="@+id/edtDeviceId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Device ID / Name" />
-
-        <EditText
             android:id="@+id/edtSiteId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Site ID / Location" />
+            android:hint="Location"
+            android:inputType="text" />
 
         <EditText
-            android:id="@+id/edtFolderPath"
+            android:id="@+id/edtIntervalMinutes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Folder path to monitor" />
-
-        <EditText
-            android:id="@+id/edtExtensionFilter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Optional extension filter (e.g. csv)" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Logging level" />
-
-        <Spinner
-            android:id="@+id/spnLogging"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Switch
-            android:id="@+id/swAllowMetered"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Allow uploads on metered network" />
+            android:layout_marginTop="12dp"
+            android:hint="Upload interval (minutes)"
+            android:inputType="number" />
 
         <Button
             android:id="@+id/btnSave"

@@ -8,13 +8,17 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.example.chicmobile.config.AppConfig
 import java.util.concurrent.TimeUnit
 
 object WorkScheduler {
     private const val PERIODIC_WORK_NAME = "periodic_file_upload"
 
     fun ensurePeriodicWork(context: Context) {
-        val periodicRequest = PeriodicWorkRequestBuilder<UploadWorker>(15, TimeUnit.MINUTES)
+        val config = AppConfig.getInstance(context)
+        val intervalMinutes = config.uploadIntervalMinutes.coerceAtLeast(15L)
+
+        val periodicRequest = PeriodicWorkRequestBuilder<UploadWorker>(intervalMinutes, TimeUnit.MINUTES)
             .setConstraints(
                 Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -24,7 +28,7 @@ object WorkScheduler {
 
         WorkManager.getInstance(context).enqueueUniquePeriodicWork(
             PERIODIC_WORK_NAME,
-            ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.UPDATE,
             periodicRequest
         )
     }
