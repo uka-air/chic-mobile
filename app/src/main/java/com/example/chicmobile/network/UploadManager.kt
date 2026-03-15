@@ -23,6 +23,12 @@ class UploadManager(private val config: AppConfig) {
         val endpoint = config.uploadEndpoint.trimStart('/')
         val url = "$baseUrl/$endpoint"
 
+        if (!url.startsWith("http://") && !url.startsWith("https://")) {
+            val message = "Invalid upload URL config: '$url'. Please configure server URL and endpoint."
+            Log.e(TAG, message)
+            return UploadResult.Failure(message)
+        }
+
         val body = MultipartBody.Builder()
             .setType(MultipartBody.FORM)
             .addFormDataPart("deviceId", config.deviceId)
@@ -35,13 +41,13 @@ class UploadManager(private val config: AppConfig) {
             )
             .build()
 
-        val request = Request.Builder()
-            .url(url)
-            .header("Authorization", "Bearer ${config.authToken}")
-            .post(body)
-            .build()
-
         return try {
+            val request = Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer ${config.authToken}")
+                .post(body)
+                .build()
+
             Log.d(TAG, "Uploading file=${file.name} to $url")
             client.newCall(request).execute().use { response ->
                 val responseBody = response.body?.string().orEmpty()
