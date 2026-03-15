@@ -50,7 +50,7 @@ class AppConfig private constructor(private val context: Context) {
         set(value) = prefs.edit().putLong(KEY_UPLOAD_INTERVAL_MINUTES, value).apply()
 
     var folderPath: String
-        get() = prefs.getString(KEY_FOLDER_PATH, "") ?: ""
+        get() = prefs.getString(KEY_FOLDER_PATH, DEFAULT_FOLDER_PATH) ?: DEFAULT_FOLDER_PATH
         set(value) = prefs.edit().putString(KEY_FOLDER_PATH, value.trim()).apply()
 
     var extensionFilter: String
@@ -86,7 +86,7 @@ class AppConfig private constructor(private val context: Context) {
         set(value) = prefs.edit().putInt(KEY_LAST_PENDING_COUNT, value).apply()
 
     fun isConfigValid(): Boolean {
-        return siteId.isNotBlank() && uploadIntervalMinutes >= 15L
+        return folderPath.isNotBlank() && uploadIntervalMinutes >= 15L
     }
 
     companion object {
@@ -108,6 +108,7 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_LAST_RUN_TIME = "last_run_time"
         private const val KEY_LAST_UPLOAD_RESULT = "last_upload_result"
         private const val KEY_LAST_PENDING_COUNT = "last_pending_count"
+        private const val DEFAULT_FOLDER_PATH = "/storage/emulated/0/Recordings/Record/Call"
 
         @Volatile
         private var instance: AppConfig? = null

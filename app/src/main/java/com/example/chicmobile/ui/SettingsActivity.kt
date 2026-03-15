@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadValues() = with(binding) {
-        edtSiteId.setText(config.siteId)
+        edtFolderPath.setText(config.folderPath)
         edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
     }
 
@@ -38,11 +38,11 @@ class SettingsActivity : AppCompatActivity() {
             return
         }
 
-        config.siteId = edtSiteId.text.toString()
+        config.folderPath = edtFolderPath.text.toString()
         config.uploadIntervalMinutes = interval
 
         if (!config.isConfigValid()) {
-            Toast.makeText(this@SettingsActivity, "Please enter a location", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@SettingsActivity, "Please enter a valid folder path", Toast.LENGTH_LONG).show()
             return
         }
 
