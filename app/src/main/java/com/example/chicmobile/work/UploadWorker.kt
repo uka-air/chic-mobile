@@ -50,36 +50,22 @@ class UploadWorker(
 
         files.forEach { sourceFile ->
             Log.d(TAG, "Upload attempt for file=${sourceFile.name}")
-            val lockedFile = FileScanner.markUploading(sourceFile)
-            if (lockedFile == null) {
-                failureCount++
-                return@forEach
-            }
 
-            when (val result = uploadManager.uploadFile(lockedFile)) {
+            when (val result = uploadManager.uploadFile(sourceFile)) {
                 UploadResult.Success -> {
-                    if (lockedFile.delete()) {
-                        successCount++
-                        Log.d(TAG, "Upload success + delete success for file=${lockedFile.name}")
-                    } else {
-                        failureCount++
-                        retryNeeded = true
-                        Log.e(TAG, "Delete failed after successful upload for ${lockedFile.absolutePath}")
-                        FileScanner.restoreFromUploading(lockedFile)
-                    }
+                    successCount++
+                    Log.d(TAG, "Upload success for file=${sourceFile.name}")
                 }
 
                 is UploadResult.Retryable -> {
                     retryNeeded = true
                     failureCount++
-                    Log.e(TAG, "Upload retryable failure for ${lockedFile.name}: ${result.reason}")
-                    FileScanner.restoreFromUploading(lockedFile)
+                    Log.e(TAG, "Upload retryable failure for ${sourceFile.name}: ${result.reason}")
                 }
 
                 is UploadResult.Failure -> {
                     failureCount++
-                    Log.e(TAG, "Upload permanent failure for ${lockedFile.name}: ${result.reason}")
-                    FileScanner.restoreFromUploading(lockedFile)
+                    Log.e(TAG, "Upload permanent failure for ${sourceFile.name}: ${result.reason}")
                 }
             }
         }
