@@ -40,6 +40,7 @@ class SettingsActivity : AppCompatActivity() {
 
         config.folderPath = edtFolderPath.text.toString()
         config.uploadIntervalMinutes = interval
+        config.extensionFilter = "m4a"
 
         if (!config.isConfigValid()) {
             Toast.makeText(this@SettingsActivity, "Please enter a valid folder path", Toast.LENGTH_LONG).show()

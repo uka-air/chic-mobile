@@ -16,9 +16,17 @@ object FileScanner {
 
         val now = System.currentTimeMillis()
         val extension = extensionFilter.trim().removePrefix(".").lowercase()
+        val allFiles = folder.listFiles()
 
-        return folder.listFiles()
-            ?.asSequence()
+        if (allFiles == null) {
+            Log.e(TAG, "Unable to list files from folder (permission denied or IO error): $folderPath")
+            return emptyList()
+        }
+
+        Log.d(TAG, "Scanning folder=$folderPath totalEntries=${allFiles.size} extensionFilter=$extension")
+
+        return allFiles
+            .asSequence()
             ?.filter { it.isFile }
             ?.filter { !it.name.endsWith(UPLOADING_SUFFIX) }
             ?.filter {
