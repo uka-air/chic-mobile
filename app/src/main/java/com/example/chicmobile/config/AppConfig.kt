@@ -30,11 +30,11 @@ class AppConfig private constructor(private val context: Context) {
     }
 
     var serverBaseUrl: String
-        get() = prefs.getString(KEY_SERVER_BASE_URL, "") ?: ""
+        get() = prefs.getString(KEY_SERVER_BASE_URL, DEFAULT_SERVER_BASE_URL) ?: DEFAULT_SERVER_BASE_URL
         set(value) = prefs.edit().putString(KEY_SERVER_BASE_URL, value.trim()).apply()
 
     var uploadEndpoint: String
-        get() = prefs.getString(KEY_UPLOAD_ENDPOINT, "") ?: ""
+        get() = prefs.getString(KEY_UPLOAD_ENDPOINT, DEFAULT_UPLOAD_ENDPOINT) ?: DEFAULT_UPLOAD_ENDPOINT
         set(value) = prefs.edit().putString(KEY_UPLOAD_ENDPOINT, value.trim()).apply()
 
     var deviceId: String
@@ -109,6 +109,8 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_LAST_UPLOAD_RESULT = "last_upload_result"
         private const val KEY_LAST_PENDING_COUNT = "last_pending_count"
         private const val DEFAULT_FOLDER_PATH = "/storage/emulated/0/Recordings/Record/Call"
+        private const val DEFAULT_SERVER_BASE_URL = "https://chic-conversation-analyzer.onrender.com"
+        private const val DEFAULT_UPLOAD_ENDPOINT = "api/v1/raw_audios"
 
         @Volatile
         private var instance: AppConfig? = null
