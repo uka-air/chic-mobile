@@ -56,10 +56,11 @@ class UploadWorker(
             when (val result = uploadManager.uploadFile(sourceFile)) {
                 UploadResult.Success -> {
                     config.markUploadedFingerprint(fingerprint)
-                    if (sourceFile.delete()) {
+                    val deleted = sourceFile.delete()
+                    if (deleted) {
                         Log.d(TAG, "Upload success + delete success for file=${sourceFile.name}")
                     } else {
-                        Log.w(TAG, "Upload succeeded but delete failed (likely scoped storage restriction): ${sourceFile.absolutePath}")
+                        Log.i(TAG, "Upload success; keeping local file due to storage restrictions: ${sourceFile.absolutePath}")
                     }
                     successCount++
                 }
