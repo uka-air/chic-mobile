@@ -45,22 +45,4 @@ object FileScanner {
             .orEmpty()
     }
 
-    fun markUploading(file: File): File? {
-        val uploadFile = File(file.parentFile, file.name + UPLOADING_SUFFIX)
-        return if (file.renameTo(uploadFile)) {
-            uploadFile
-        } else {
-            Log.e(TAG, "Failed to rename file for upload lock: ${file.absolutePath}")
-            null
-        }
-    }
-
-    fun restoreFromUploading(uploadFile: File): Boolean {
-        if (!uploadFile.name.endsWith(UPLOADING_SUFFIX)) {
-            return false
-        }
-        val restoredName = uploadFile.name.removeSuffix(UPLOADING_SUFFIX)
-        val restoredFile = File(uploadFile.parentFile, restoredName)
-        return uploadFile.renameTo(restoredFile)
-    }
 }
