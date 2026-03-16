@@ -54,13 +54,11 @@ class UploadWorker(
             when (val result = uploadManager.uploadFile(sourceFile)) {
                 UploadResult.Success -> {
                     if (sourceFile.delete()) {
-                        successCount++
                         Log.d(TAG, "Upload success + delete success for file=${sourceFile.name}")
                     } else {
-                        failureCount++
-                        retryNeeded = true
-                        Log.e(TAG, "Delete failed after successful upload for ${sourceFile.absolutePath}")
+                        Log.w(TAG, "Upload succeeded but delete failed (likely scoped storage restriction): ${sourceFile.absolutePath}")
                     }
+                    successCount++
                 }
 
                 is UploadResult.Retryable -> {
