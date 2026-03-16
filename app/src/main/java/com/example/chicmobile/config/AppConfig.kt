@@ -54,6 +54,10 @@ class AppConfig private constructor(private val context: Context) {
         get() = prefs.getString(KEY_FOLDER_PATH, DEFAULT_FOLDER_PATH) ?: DEFAULT_FOLDER_PATH
         set(value) = prefs.edit().putString(KEY_FOLDER_PATH, value.trim()).apply()
 
+    var folderTreeUri: String
+        get() = prefs.getString(KEY_FOLDER_TREE_URI, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_FOLDER_TREE_URI, value.trim()).apply()
+
     var extensionFilter: String
         get() = prefs.getString(KEY_EXTENSION_FILTER, "") ?: ""
         set(value) = prefs.edit().putString(KEY_EXTENSION_FILTER, value.trim()).apply()
@@ -124,6 +128,7 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_SITE_ID = "site_id"
         private const val KEY_UPLOAD_INTERVAL_MINUTES = "upload_interval_minutes"
         private const val KEY_FOLDER_PATH = "folder_path"
+        private const val KEY_FOLDER_TREE_URI = "folder_tree_uri"
         private const val KEY_EXTENSION_FILTER = "extension_filter"
         private const val KEY_ALLOW_METERED = "allow_metered"
         private const val KEY_LOGGING_LEVEL = "logging_level"

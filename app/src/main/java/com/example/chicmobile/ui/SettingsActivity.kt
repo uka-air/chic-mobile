@@ -1,7 +1,11 @@
 package com.example.chicmobile.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.DocumentsContract
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.chicmobile.config.AppConfig
 import com.example.chicmobile.databinding.ActivitySettingsBinding
@@ -12,6 +16,21 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var config: AppConfig
 
+    private val folderPickerLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+            if (uri == null) return@registerForActivityResult
+
+            val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uri, flags)
+
+            config.folderTreeUri = uri.toString()
+            binding.txtFolderPermission.text = "SAF permission granted: $uri"
+
+            treeUriToPath(uri)?.let { resolvedPath ->
+                binding.edtFolderPath.setText(resolvedPath)
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
@@ -21,6 +40,10 @@ class SettingsActivity : AppCompatActivity() {
 
         loadValues()
 
+        binding.btnPickFolder.setOnClickListener {
+            folderPickerLauncher.launch(null)
+        }
+
         binding.btnSave.setOnClickListener {
             saveValues()
         }
@@ -29,6 +52,11 @@ class SettingsActivity : AppCompatActivity() {
     private fun loadValues() = with(binding) {
         edtFolderPath.setText(config.folderPath)
         edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
+        txtFolderPermission.text = if (config.folderTreeUri.isNotBlank()) {
+            "SAF permission granted: ${config.folderTreeUri}"
+        } else {
+            "No SAF folder permission granted"
+        }
     }
 
     private fun saveValues() = with(binding) {
@@ -51,5 +79,18 @@ class SettingsActivity : AppCompatActivity() {
         WorkScheduler.ensurePeriodicWork(this@SettingsActivity)
         Toast.makeText(this@SettingsActivity, "Settings saved", Toast.LENGTH_SHORT).show()
         finish()
+    }
+
+    private fun treeUriToPath(uri: Uri): String? {
+        return try {
+            val docId = DocumentsContract.getTreeDocumentId(uri)
+            if (docId.startsWith("primary:")) {
+                "/storage/emulated/0/" + docId.removePrefix("primary:")
+            } else {
+                null
+            }
+        } catch (_: Exception) {
+            null
+        }
     }
 }

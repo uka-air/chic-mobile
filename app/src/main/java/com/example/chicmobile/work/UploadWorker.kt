@@ -1,15 +1,17 @@
 package com.example.chicmobile.work
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.net.Uri
 import android.util.Log
+import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.chicmobile.config.AppConfig
 import com.example.chicmobile.file.FileScanner
 import com.example.chicmobile.network.UploadManager
 import com.example.chicmobile.network.UploadResult
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 
 class UploadWorker(
     context: Context,
@@ -56,7 +58,7 @@ class UploadWorker(
             when (val result = uploadManager.uploadFile(sourceFile)) {
                 UploadResult.Success -> {
                     config.markUploadedFingerprint(fingerprint)
-                    val deleted = sourceFile.delete()
+                    val deleted = sourceFile.delete() || deleteViaSafTree(config.folderTreeUri, sourceFile.name)
                     if (deleted) {
                         Log.d(TAG, "Upload success + delete success for file=${sourceFile.name}")
                     } else {
@@ -90,6 +92,23 @@ class UploadWorker(
             Result.retry()
         } else {
             Result.success()
+        }
+    }
+
+    private fun deleteViaSafTree(treeUriString: String, fileName: String): Boolean {
+        if (treeUriString.isBlank()) return false
+        return try {
+            val treeUri = Uri.parse(treeUriString)
+            val tree = DocumentFile.fromTreeUri(applicationContext, treeUri) ?: return false
+            val target = tree.findFile(fileName) ?: return false
+            val deleted = target.delete()
+            if (deleted) {
+                Log.d(TAG, "Deleted via SAF tree: $fileName")
+            }
+            deleted
+        } catch (e: Exception) {
+            Log.e(TAG, "SAF delete failed for $fileName", e)
+            false
         }
     }
 

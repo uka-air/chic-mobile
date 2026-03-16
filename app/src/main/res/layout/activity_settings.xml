@@ -9,10 +9,25 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <Button
+            android:id="@+id/btnPickFolder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pick folder (for delete permission)" />
+
+        <TextView
+            android:id="@+id/txtFolderPermission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="No SAF folder permission granted"
+            android:textSize="12sp" />
+
         <EditText
             android:id="@+id/edtFolderPath"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
             android:hint="Location (folder path)"
             android:inputType="text"
             android:text="/storage/emulated/0/Recordings/Record/Call" />
