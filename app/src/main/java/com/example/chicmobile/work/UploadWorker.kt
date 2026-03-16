@@ -34,14 +34,15 @@ class UploadWorker(
             return Result.retry()
         }
 
-        val files = FileScanner.scanEligibleFiles(
+        val scannedFiles = FileScanner.scanEligibleFiles(
             folderPath = config.folderPath,
             extensionFilter = config.extensionFilter,
             minAgeSeconds = 30
         )
+        val files = scannedFiles.filterNot { config.hasUploadedFingerprint(fileFingerprint(it)) }
         config.lastPendingCount = files.size
 
-        Log.d(TAG, "Folder: ${config.folderPath}, found files=${files.size}")
+        Log.d(TAG, "Folder: ${config.folderPath}, scanned=${scannedFiles.size}, pending=${files.size}")
 
         val uploadManager = UploadManager(config)
         var retryNeeded = false
@@ -49,10 +50,12 @@ class UploadWorker(
         var failureCount = 0
 
         files.forEach { sourceFile ->
+            val fingerprint = fileFingerprint(sourceFile)
             Log.d(TAG, "Upload attempt for file=${sourceFile.name}")
 
             when (val result = uploadManager.uploadFile(sourceFile)) {
                 UploadResult.Success -> {
+                    config.markUploadedFingerprint(fingerprint)
                     if (sourceFile.delete()) {
                         Log.d(TAG, "Upload success + delete success for file=${sourceFile.name}")
                     } else {
@@ -77,7 +80,8 @@ class UploadWorker(
         val status = "Finished: success=$successCount, failures=$failureCount, total=${files.size}"
         config.lastRunTime = System.currentTimeMillis()
         config.lastUploadResult = status
-        config.lastPendingCount = FileScanner.scanEligibleFiles(config.folderPath, config.extensionFilter).size
+        config.lastPendingCount = FileScanner.scanEligibleFiles(config.folderPath, config.extensionFilter)
+            .count { !config.hasUploadedFingerprint(fileFingerprint(it)) }
         Log.d(TAG, "Worker finish: $status")
 
         return if (retryNeeded) {
@@ -86,6 +90,10 @@ class UploadWorker(
         } else {
             Result.success()
         }
+    }
+
+    private fun fileFingerprint(file: java.io.File): String {
+        return "${file.absolutePath}:${file.length()}:${file.lastModified()}"
     }
 
     private fun isMeteredConnection(): Boolean {

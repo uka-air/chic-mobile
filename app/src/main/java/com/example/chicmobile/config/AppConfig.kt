@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import java.util.LinkedHashSet
 
 class AppConfig private constructor(private val context: Context) {
 
@@ -89,6 +90,28 @@ class AppConfig private constructor(private val context: Context) {
         return folderPath.isNotBlank() && uploadIntervalMinutes >= 15L
     }
 
+    fun hasUploadedFingerprint(fingerprint: String): Boolean {
+        if (fingerprint.isBlank()) return false
+        return prefs.getStringSet(KEY_UPLOADED_FINGERPRINTS, emptySet())?.contains(fingerprint) == true
+    }
+
+    fun markUploadedFingerprint(fingerprint: String) {
+        if (fingerprint.isBlank()) return
+        val current = prefs.getStringSet(KEY_UPLOADED_FINGERPRINTS, emptySet()) ?: emptySet()
+        val updated = LinkedHashSet(current)
+        updated.add(fingerprint)
+
+        while (updated.size > MAX_UPLOADED_FINGERPRINTS) {
+            val it = updated.iterator()
+            if (it.hasNext()) {
+                it.next()
+                it.remove()
+            }
+        }
+
+        prefs.edit().putStringSet(KEY_UPLOADED_FINGERPRINTS, updated).apply()
+    }
+
     companion object {
         private const val TAG = "AppConfig"
         private const val PREFS_NAME = "app_config"
@@ -108,6 +131,8 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_LAST_RUN_TIME = "last_run_time"
         private const val KEY_LAST_UPLOAD_RESULT = "last_upload_result"
         private const val KEY_LAST_PENDING_COUNT = "last_pending_count"
+        private const val KEY_UPLOADED_FINGERPRINTS = "uploaded_fingerprints"
+        private const val MAX_UPLOADED_FINGERPRINTS = 2000
         private const val DEFAULT_FOLDER_PATH = "/storage/emulated/0/Recordings/Record/Call"
         private const val DEFAULT_SERVER_BASE_URL = "https://chic-conversation-analyzer.onrender.com"
         private const val DEFAULT_UPLOAD_ENDPOINT = "api/v1/raw_audios"
