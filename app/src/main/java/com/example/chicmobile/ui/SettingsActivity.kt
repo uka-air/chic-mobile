@@ -26,8 +26,10 @@ class SettingsActivity : AppCompatActivity() {
             config.folderTreeUri = uri.toString()
             binding.txtFolderPermission.text = "SAF permission granted: $uri"
 
-            treeUriToPath(uri)?.let { resolvedPath ->
-                binding.edtFolderPath.setText(resolvedPath)
+            val resolvedPath = treeUriToPath(uri)
+            if (resolvedPath != null) {
+                config.folderPath = resolvedPath
+                binding.txtFolderPath.text = "Folder path: $resolvedPath"
             }
         }
 
@@ -50,8 +52,8 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadValues() = with(binding) {
-        edtFolderPath.setText(config.folderPath)
         edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
+        txtFolderPath.text = "Folder path: ${config.folderPath}"
         txtFolderPermission.text = if (config.folderTreeUri.isNotBlank()) {
             "SAF permission granted: ${config.folderTreeUri}"
         } else {
@@ -66,12 +68,16 @@ class SettingsActivity : AppCompatActivity() {
             return
         }
 
-        config.folderPath = edtFolderPath.text.toString()
+        if (config.folderTreeUri.isBlank()) {
+            Toast.makeText(this@SettingsActivity, "Please pick folder once for scan/delete permission", Toast.LENGTH_LONG).show()
+            return
+        }
+
         config.uploadIntervalMinutes = interval
         config.extensionFilter = "m4a"
 
         if (!config.isConfigValid()) {
-            Toast.makeText(this@SettingsActivity, "Please enter a valid folder path", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@SettingsActivity, "Please pick a valid folder", Toast.LENGTH_LONG).show()
             return
         }
 

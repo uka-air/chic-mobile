@@ -13,7 +13,7 @@
             android:id="@+id/btnPickFolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pick folder (for delete permission)" />
+            android:text="Pick folder (used for scan + delete)" />
 
         <TextView
             android:id="@+id/txtFolderPermission"
@@ -23,14 +23,13 @@
             android:text="No SAF folder permission granted"
             android:textSize="12sp" />
 
-        <EditText
-            android:id="@+id/edtFolderPath"
+        <TextView
+            android:id="@+id/txtFolderPath"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:hint="Location (folder path)"
-            android:inputType="text"
-            android:text="/storage/emulated/0/Recordings/Record/Call" />
+            android:layout_marginTop="8dp"
+            android:text="Folder path: /storage/emulated/0/Recordings/Record/Call"
+            android:textSize="12sp" />
 
         <EditText
             android:id="@+id/edtIntervalMinutes"
