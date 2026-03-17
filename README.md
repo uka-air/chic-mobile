@@ -51,3 +51,15 @@ Run unit tests:
 ```bash
 gradle :app:testDebugUnitTest
 ```
+
+## API helper script
+
+To request a presigned key and then call `raw_audios` with that key:
+
+```bash
+./scripts/request_upload_urls.sh
+```
+
+The script performs:
+1. `POST /api/v1/presigns`
+2. `POST /api/v1/raw_audios` with `{"key":"<key-from-presigns>"}`

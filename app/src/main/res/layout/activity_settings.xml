@@ -9,65 +9,35 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/edtServerBaseUrl"
+        <Button
+            android:id="@+id/btnPickFolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Server base URL (https://...)" />
-
-        <EditText
-            android:id="@+id/edtUploadEndpoint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Upload endpoint (api/upload)" />
-
-        <EditText
-            android:id="@+id/edtToken"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="API key / Auth token" />
-
-        <EditText
-            android:id="@+id/edtDeviceId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Device ID / Name" />
-
-        <EditText
-            android:id="@+id/edtSiteId"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Site ID / Location" />
-
-        <EditText
-            android:id="@+id/edtFolderPath"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Folder path to monitor" />
-
-        <EditText
-            android:id="@+id/edtExtensionFilter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="Optional extension filter (e.g. csv)" />
+            android:text="Pick folder (used for scan + delete)" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Logging level" />
-
-        <Spinner
-            android:id="@+id/spnLogging"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <Switch
-            android:id="@+id/swAllowMetered"
+            android:id="@+id/txtFolderPermission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Allow uploads on metered network" />
+            android:text="No SAF folder permission granted"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/txtFolderPath"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Folder path: /storage/emulated/0/Recordings/Record/Call"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/edtIntervalMinutes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:hint="Upload interval (minutes)"
+            android:inputType="number" />
 
         <Button
             android:id="@+id/btnSave"

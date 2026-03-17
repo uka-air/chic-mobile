@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import java.util.LinkedHashSet
 
 class AppConfig private constructor(private val context: Context) {
 
@@ -30,11 +31,11 @@ class AppConfig private constructor(private val context: Context) {
     }
 
     var serverBaseUrl: String
-        get() = prefs.getString(KEY_SERVER_BASE_URL, "") ?: ""
+        get() = prefs.getString(KEY_SERVER_BASE_URL, DEFAULT_SERVER_BASE_URL) ?: DEFAULT_SERVER_BASE_URL
         set(value) = prefs.edit().putString(KEY_SERVER_BASE_URL, value.trim()).apply()
 
     var uploadEndpoint: String
-        get() = prefs.getString(KEY_UPLOAD_ENDPOINT, "") ?: ""
+        get() = prefs.getString(KEY_UPLOAD_ENDPOINT, DEFAULT_UPLOAD_ENDPOINT) ?: DEFAULT_UPLOAD_ENDPOINT
         set(value) = prefs.edit().putString(KEY_UPLOAD_ENDPOINT, value.trim()).apply()
 
     var deviceId: String
@@ -45,9 +46,17 @@ class AppConfig private constructor(private val context: Context) {
         get() = prefs.getString(KEY_SITE_ID, "") ?: ""
         set(value) = prefs.edit().putString(KEY_SITE_ID, value.trim()).apply()
 
+    var uploadIntervalMinutes: Long
+        get() = prefs.getLong(KEY_UPLOAD_INTERVAL_MINUTES, 15L)
+        set(value) = prefs.edit().putLong(KEY_UPLOAD_INTERVAL_MINUTES, value).apply()
+
     var folderPath: String
-        get() = prefs.getString(KEY_FOLDER_PATH, "") ?: ""
+        get() = prefs.getString(KEY_FOLDER_PATH, DEFAULT_FOLDER_PATH) ?: DEFAULT_FOLDER_PATH
         set(value) = prefs.edit().putString(KEY_FOLDER_PATH, value.trim()).apply()
+
+    var folderTreeUri: String
+        get() = prefs.getString(KEY_FOLDER_TREE_URI, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_FOLDER_TREE_URI, value.trim()).apply()
 
     var extensionFilter: String
         get() = prefs.getString(KEY_EXTENSION_FILTER, "") ?: ""
@@ -82,12 +91,38 @@ class AppConfig private constructor(private val context: Context) {
         set(value) = prefs.edit().putInt(KEY_LAST_PENDING_COUNT, value).apply()
 
     fun isConfigValid(): Boolean {
-        return serverBaseUrl.startsWith("https://") &&
-            uploadEndpoint.isNotBlank() &&
-            authToken.isNotBlank() &&
-            deviceId.isNotBlank() &&
-            siteId.isNotBlank() &&
-            folderPath.isNotBlank()
+        return folderPath.isNotBlank() && uploadIntervalMinutes >= 15L
+    }
+
+    fun hasUploadedFingerprint(fingerprint: String): Boolean {
+        if (fingerprint.isBlank()) return false
+        return prefs.getStringSet(KEY_UPLOADED_FINGERPRINTS, emptySet())?.contains(fingerprint) == true
+    }
+
+    fun markUploadedFingerprint(fingerprint: String) {
+        if (fingerprint.isBlank()) return
+        val current = prefs.getStringSet(KEY_UPLOADED_FINGERPRINTS, emptySet()) ?: emptySet()
+        val updated = LinkedHashSet(current)
+        updated.add(fingerprint)
+
+        while (updated.size > MAX_UPLOADED_FINGERPRINTS) {
+            val it = updated.iterator()
+            if (it.hasNext()) {
+                it.next()
+                it.remove()
+            }
+        }
+
+        prefs.edit().putStringSet(KEY_UPLOADED_FINGERPRINTS, updated).apply()
+    }
+
+    fun removeUploadedFingerprint(fingerprint: String) {
+        if (fingerprint.isBlank()) return
+        val current = prefs.getStringSet(KEY_UPLOADED_FINGERPRINTS, emptySet()) ?: emptySet()
+        if (!current.contains(fingerprint)) return
+        val updated = LinkedHashSet(current)
+        updated.remove(fingerprint)
+        prefs.edit().putStringSet(KEY_UPLOADED_FINGERPRINTS, updated).apply()
     }
 
     companion object {
@@ -100,7 +135,9 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_AUTH_TOKEN = "auth_token"
         private const val KEY_DEVICE_ID = "device_id"
         private const val KEY_SITE_ID = "site_id"
+        private const val KEY_UPLOAD_INTERVAL_MINUTES = "upload_interval_minutes"
         private const val KEY_FOLDER_PATH = "folder_path"
+        private const val KEY_FOLDER_TREE_URI = "folder_tree_uri"
         private const val KEY_EXTENSION_FILTER = "extension_filter"
         private const val KEY_ALLOW_METERED = "allow_metered"
         private const val KEY_LOGGING_LEVEL = "logging_level"
@@ -108,6 +145,11 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_LAST_RUN_TIME = "last_run_time"
         private const val KEY_LAST_UPLOAD_RESULT = "last_upload_result"
         private const val KEY_LAST_PENDING_COUNT = "last_pending_count"
+        private const val KEY_UPLOADED_FINGERPRINTS = "uploaded_fingerprints"
+        private const val MAX_UPLOADED_FINGERPRINTS = 2000
+        private const val DEFAULT_FOLDER_PATH = "/storage/emulated/0/Recordings/Record/Call"
+        private const val DEFAULT_SERVER_BASE_URL = "https://chic-conversation-analyzer.onrender.com"
+        private const val DEFAULT_UPLOAD_ENDPOINT = "api/v1/raw_audios"
 
         @Volatile
         private var instance: AppConfig? = null

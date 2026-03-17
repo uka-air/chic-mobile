@@ -1,8 +1,11 @@
 package com.example.chicmobile.ui
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.widget.ArrayAdapter
+import android.provider.DocumentsContract
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.example.chicmobile.config.AppConfig
 import com.example.chicmobile.databinding.ActivitySettingsBinding
@@ -13,6 +16,23 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
     private lateinit var config: AppConfig
 
+    private val folderPickerLauncher =
+        registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
+            if (uri == null) return@registerForActivityResult
+
+            val flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+            contentResolver.takePersistableUriPermission(uri, flags)
+
+            config.folderTreeUri = uri.toString()
+            binding.txtFolderPermission.text = "SAF permission granted: $uri"
+
+            val resolvedPath = treeUriToPath(uri)
+            if (resolvedPath != null) {
+                config.folderPath = resolvedPath
+                binding.txtFolderPath.text = "Folder path: $resolvedPath"
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySettingsBinding.inflate(layoutInflater)
@@ -20,10 +40,11 @@ class SettingsActivity : AppCompatActivity() {
 
         config = AppConfig.getInstance(this)
 
-        val levels = listOf("DEBUG", "INFO", "WARN", "ERROR")
-        binding.spnLogging.adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, levels)
-
         loadValues()
+
+        binding.btnPickFolder.setOnClickListener {
+            folderPickerLauncher.launch(null)
+        }
 
         binding.btnSave.setOnClickListener {
             saveValues()
@@ -31,34 +52,32 @@ class SettingsActivity : AppCompatActivity() {
     }
 
     private fun loadValues() = with(binding) {
-        edtServerBaseUrl.setText(config.serverBaseUrl)
-        edtUploadEndpoint.setText(config.uploadEndpoint)
-        edtToken.setText(config.authToken)
-        edtDeviceId.setText(config.deviceId)
-        edtSiteId.setText(config.siteId)
-        edtFolderPath.setText(config.folderPath)
-        edtExtensionFilter.setText(config.extensionFilter)
-        swAllowMetered.isChecked = config.allowMetered
-
-        val levelIndex = (spnLogging.adapter as ArrayAdapter<String>).getPosition(config.loggingLevel)
-        if (levelIndex >= 0) {
-            spnLogging.setSelection(levelIndex)
+        edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
+        txtFolderPath.text = "Folder path: ${config.folderPath}"
+        txtFolderPermission.text = if (config.folderTreeUri.isNotBlank()) {
+            "SAF permission granted: ${config.folderTreeUri}"
+        } else {
+            "No SAF folder permission granted"
         }
     }
 
     private fun saveValues() = with(binding) {
-        config.serverBaseUrl = edtServerBaseUrl.text.toString()
-        config.uploadEndpoint = edtUploadEndpoint.text.toString()
-        config.authToken = edtToken.text.toString()
-        config.deviceId = edtDeviceId.text.toString()
-        config.siteId = edtSiteId.text.toString()
-        config.folderPath = edtFolderPath.text.toString()
-        config.extensionFilter = edtExtensionFilter.text.toString()
-        config.allowMetered = swAllowMetered.isChecked
-        config.loggingLevel = spnLogging.selectedItem.toString()
+        val interval = edtIntervalMinutes.text.toString().toLongOrNull()
+        if (interval == null || interval < 15L) {
+            Toast.makeText(this@SettingsActivity, "Interval must be at least 15 minutes", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        if (config.folderTreeUri.isBlank()) {
+            Toast.makeText(this@SettingsActivity, "Please pick folder once for scan/delete permission", Toast.LENGTH_LONG).show()
+            return
+        }
+
+        config.uploadIntervalMinutes = interval
+        config.extensionFilter = "m4a"
 
         if (!config.isConfigValid()) {
-            Toast.makeText(this@SettingsActivity, "Please fill all required fields and use HTTPS URL", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@SettingsActivity, "Please pick a valid folder", Toast.LENGTH_LONG).show()
             return
         }
 
@@ -66,5 +85,18 @@ class SettingsActivity : AppCompatActivity() {
         WorkScheduler.ensurePeriodicWork(this@SettingsActivity)
         Toast.makeText(this@SettingsActivity, "Settings saved", Toast.LENGTH_SHORT).show()
         finish()
+    }
+
+    private fun treeUriToPath(uri: Uri): String? {
+        return try {
+            val docId = DocumentsContract.getTreeDocumentId(uri)
+            if (docId.startsWith("primary:")) {
+                "/storage/emulated/0/" + docId.removePrefix("primary:")
+            } else {
+                null
+            }
+        } catch (_: Exception) {
+            null
+        }
     }
 }
