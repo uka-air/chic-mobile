@@ -41,10 +41,20 @@ class UploadWorker(
             extensionFilter = config.extensionFilter,
             minAgeSeconds = 30
         )
+        val alreadyUploadedFiles = scannedFiles.filter { config.hasUploadedFingerprint(fileFingerprint(it)) }
         val files = scannedFiles.filterNot { config.hasUploadedFingerprint(fileFingerprint(it)) }
         config.lastPendingCount = files.size
 
-        Log.d(TAG, "Folder: ${config.folderPath}, scanned=${scannedFiles.size}, pending=${files.size}")
+        Log.d(TAG, "Folder: ${config.folderPath}, scanned=${scannedFiles.size}, pending=${files.size}, alreadyUploaded=${alreadyUploadedFiles.size}")
+
+        alreadyUploadedFiles.forEach { uploadedFile ->
+            val fingerprint = fileFingerprint(uploadedFile)
+            val deleted = uploadedFile.delete() || deleteViaSafTree(config.folderTreeUri, uploadedFile.name)
+            if (deleted) {
+                config.removeUploadedFingerprint(fingerprint)
+                Log.d(TAG, "Deleted previously-uploaded local file: ${uploadedFile.name}")
+            }
+        }
 
         val uploadManager = UploadManager(config)
         var retryNeeded = false

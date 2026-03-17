@@ -116,6 +116,15 @@ class AppConfig private constructor(private val context: Context) {
         prefs.edit().putStringSet(KEY_UPLOADED_FINGERPRINTS, updated).apply()
     }
 
+    fun removeUploadedFingerprint(fingerprint: String) {
+        if (fingerprint.isBlank()) return
+        val current = prefs.getStringSet(KEY_UPLOADED_FINGERPRINTS, emptySet()) ?: emptySet()
+        if (!current.contains(fingerprint)) return
+        val updated = LinkedHashSet(current)
+        updated.remove(fingerprint)
+        prefs.edit().putStringSet(KEY_UPLOADED_FINGERPRINTS, updated).apply()
+    }
+
     companion object {
         private const val TAG = "AppConfig"
         private const val PREFS_NAME = "app_config"
