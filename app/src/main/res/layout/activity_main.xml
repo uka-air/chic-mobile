@@ -89,7 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/chic_white"
-            android:text="History Sync"
+            android:text="History Sync / ซิงก์ประวัติ"
             android:textColor="@color/chic_black" />
 
         <Button

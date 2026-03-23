@@ -24,13 +24,13 @@ class UploadWorker(
         Log.d(TAG, "Worker started")
 
         if (!config.setupComplete || !config.isConfigValid()) {
-            val message = "Setup incomplete or invalid config"
+            val message = "Setup incomplete or invalid config / การตั้งค่าไม่ครบหรือไม่ถูกต้อง"
             Log.e(TAG, message)
             config.lastUploadResult = message
             config.appendSyncHistory(
                 SyncHistoryEntry(
                     timestamp = System.currentTimeMillis(),
-                    title = "History sync blocked",
+                    title = "History sync blocked / บล็อกการซิงก์ประวัติ",
                     details = message,
                     successCount = 0,
                     failureCount = 0,
@@ -41,13 +41,13 @@ class UploadWorker(
         }
 
         if (!config.allowMetered && isMeteredConnection()) {
-            val message = "Metered network detected and disallowed by settings"
+            val message = "Metered network detected and disallowed by settings / พบเครือข่ายคิดค่าบริการและระบบไม่อนุญาต"
             Log.d(TAG, message)
             config.lastUploadResult = message
             config.appendSyncHistory(
                 SyncHistoryEntry(
                     timestamp = System.currentTimeMillis(),
-                    title = "History sync delayed",
+                    title = "History sync delayed / เลื่อนการซิงก์ประวัติ",
                     details = message,
                     successCount = 0,
                     failureCount = 0,
@@ -111,14 +111,14 @@ class UploadWorker(
             }
         }
 
-        val status = "Finished: success=$successCount, failures=$failureCount, total=${files.size}"
+        val status = "Finished / เสร็จสิ้น: success=$successCount, failures=$failureCount, total=${files.size}"
         val completedAt = System.currentTimeMillis()
         config.lastRunTime = completedAt
         config.lastUploadResult = status
         config.appendSyncHistory(
             SyncHistoryEntry(
                 timestamp = completedAt,
-                title = if (failureCount == 0) "History sync completed" else "History sync completed with issues",
+                title = if (failureCount == 0) "History sync completed / ซิงก์ประวัติเสร็จสิ้น" else "History sync completed with issues / ซิงก์ประวัติเสร็จสิ้นแต่มีปัญหา",
                 details = status,
                 successCount = successCount,
                 failureCount = failureCount,

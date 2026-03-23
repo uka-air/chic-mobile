@@ -27,11 +27,11 @@ class HistorySyncActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
         binding.btnSyncNow.setOnClickListener {
             if (!config.setupComplete || !config.isConfigValid()) {
-                Toast.makeText(this, "Complete setup before syncing history", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Complete setup before syncing history / ตั้งค่าก่อนซิงก์ประวัติ", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             WorkScheduler.runNow(this)
-            Toast.makeText(this, "History sync queued", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "History sync queued / เพิ่มงานซิงก์ประวัติแล้ว", Toast.LENGTH_SHORT).show()
             refreshContent()
         }
     }
@@ -48,9 +48,9 @@ class HistorySyncActivity : AppCompatActivity() {
             0
         }
         binding.txtHistorySummary.text = buildString {
-            append("Ready to sync call history to the server.\n")
-            append("Pending files: $pending\n")
-            append("Last result: ${config.lastUploadResult}")
+            append("Ready to sync call history to the server / พร้อมซิงก์ประวัติการโทรขึ้นเซิร์ฟเวอร์\n")
+            append("Pending files / ไฟล์ที่รอส่ง: $pending\n")
+            append("Last result / ผลลัพธ์ล่าสุด: ${config.lastUploadResult}")
         }
 
         renderHistory(config.getSyncHistory())
@@ -60,7 +60,7 @@ class HistorySyncActivity : AppCompatActivity() {
         binding.historyContainer.removeAllViews()
 
         if (entries.isEmpty()) {
-            binding.historyContainer.addView(createHistoryTextView("No history sync attempts yet."))
+            binding.historyContainer.addView(createHistoryTextView("No history sync attempts yet / ยังไม่มีประวัติการซิงก์"))
             return
         }
 
@@ -73,7 +73,7 @@ class HistorySyncActivity : AppCompatActivity() {
                 append("\n")
                 append(entry.details)
                 append("\n")
-                append("Uploaded ${entry.successCount} of ${entry.totalCount}; failures ${entry.failureCount}")
+                append("Uploaded / อัปโหลดแล้ว ${entry.successCount} จาก ${entry.totalCount}; failures / ล้มเหลว ${entry.failureCount}")
             }
             binding.historyContainer.addView(createHistoryTextView(text))
         }
