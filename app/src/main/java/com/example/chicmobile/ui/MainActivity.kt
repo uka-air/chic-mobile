@@ -46,6 +46,10 @@ class MainActivity : AppCompatActivity() {
             promptForSettingsPasscode()
         }
 
+        binding.btnHistorySync.setOnClickListener {
+            startActivity(Intent(this, HistorySyncActivity::class.java))
+        }
+
         binding.btnRunNow.setOnClickListener {
             if (!hasStoragePermission()) {
                 requestStoragePermissionIfNeeded()

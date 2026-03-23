@@ -9,6 +9,7 @@ import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.chicmobile.config.AppConfig
+import com.example.chicmobile.config.SyncHistoryEntry
 import com.example.chicmobile.file.FileScanner
 import com.example.chicmobile.network.UploadManager
 import com.example.chicmobile.network.UploadResult
@@ -26,6 +27,16 @@ class UploadWorker(
             val message = "Setup incomplete or invalid config"
             Log.e(TAG, message)
             config.lastUploadResult = message
+            config.appendSyncHistory(
+                SyncHistoryEntry(
+                    timestamp = System.currentTimeMillis(),
+                    title = "History sync blocked",
+                    details = message,
+                    successCount = 0,
+                    failureCount = 0,
+                    totalCount = 0,
+                )
+            )
             return Result.success()
         }
 
@@ -33,6 +44,16 @@ class UploadWorker(
             val message = "Metered network detected and disallowed by settings"
             Log.d(TAG, message)
             config.lastUploadResult = message
+            config.appendSyncHistory(
+                SyncHistoryEntry(
+                    timestamp = System.currentTimeMillis(),
+                    title = "History sync delayed",
+                    details = message,
+                    successCount = 0,
+                    failureCount = 0,
+                    totalCount = 0,
+                )
+            )
             return Result.retry()
         }
 
@@ -91,8 +112,19 @@ class UploadWorker(
         }
 
         val status = "Finished: success=$successCount, failures=$failureCount, total=${files.size}"
-        config.lastRunTime = System.currentTimeMillis()
+        val completedAt = System.currentTimeMillis()
+        config.lastRunTime = completedAt
         config.lastUploadResult = status
+        config.appendSyncHistory(
+            SyncHistoryEntry(
+                timestamp = completedAt,
+                title = if (failureCount == 0) "History sync completed" else "History sync completed with issues",
+                details = status,
+                successCount = successCount,
+                failureCount = failureCount,
+                totalCount = files.size,
+            )
+        )
         config.lastPendingCount = FileScanner.scanEligibleFiles(config.folderPath, config.extensionFilter)
             .count { !config.hasUploadedFingerprint(fileFingerprint(it)) }
         Log.d(TAG, "Worker finish: $status")

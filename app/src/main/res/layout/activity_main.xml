@@ -82,6 +82,16 @@
             android:text="Run Upload Now"
             android:textColor="@color/chic_black" />
 
+
+        <Button
+            android:id="@+id/btnHistorySync"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="@color/chic_white"
+            android:text="History Sync"
+            android:textColor="@color/chic_black" />
+
         <Button
             android:id="@+id/btnSettings"
             android:layout_width="match_parent"

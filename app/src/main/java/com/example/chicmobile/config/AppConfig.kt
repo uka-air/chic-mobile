@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import org.json.JSONArray
+import org.json.JSONObject
 import java.util.LinkedHashSet
 
 class AppConfig private constructor(private val context: Context) {
@@ -125,6 +127,51 @@ class AppConfig private constructor(private val context: Context) {
         prefs.edit().putStringSet(KEY_UPLOADED_FINGERPRINTS, updated).apply()
     }
 
+    fun getSyncHistory(): List<SyncHistoryEntry> {
+        val raw = prefs.getString(KEY_SYNC_HISTORY, "[]") ?: "[]"
+        return try {
+            val array = JSONArray(raw)
+            buildList {
+                for (index in 0 until array.length()) {
+                    val item = array.optJSONObject(index) ?: continue
+                    add(
+                        SyncHistoryEntry(
+                            timestamp = item.optLong("timestamp"),
+                            title = item.optString("title"),
+                            details = item.optString("details"),
+                            successCount = item.optInt("successCount"),
+                            failureCount = item.optInt("failureCount"),
+                            totalCount = item.optInt("totalCount"),
+                        )
+                    )
+                }
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Failed to parse sync history", e)
+            emptyList()
+        }
+    }
+
+    fun appendSyncHistory(entry: SyncHistoryEntry) {
+        val trimmed = ArrayList(getSyncHistory().take(MAX_SYNC_HISTORY_ITEMS - 1))
+        trimmed.add(0, entry)
+
+        val payload = JSONArray()
+        trimmed.take(MAX_SYNC_HISTORY_ITEMS).forEach { item ->
+            payload.put(
+                JSONObject()
+                    .put("timestamp", item.timestamp)
+                    .put("title", item.title)
+                    .put("details", item.details)
+                    .put("successCount", item.successCount)
+                    .put("failureCount", item.failureCount)
+                    .put("totalCount", item.totalCount)
+            )
+        }
+
+        prefs.edit().putString(KEY_SYNC_HISTORY, payload.toString()).apply()
+    }
+
     companion object {
         private const val TAG = "AppConfig"
         private const val PREFS_NAME = "app_config"
@@ -146,7 +193,9 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_LAST_UPLOAD_RESULT = "last_upload_result"
         private const val KEY_LAST_PENDING_COUNT = "last_pending_count"
         private const val KEY_UPLOADED_FINGERPRINTS = "uploaded_fingerprints"
+        private const val KEY_SYNC_HISTORY = "sync_history"
         private const val MAX_UPLOADED_FINGERPRINTS = 2000
+        private const val MAX_SYNC_HISTORY_ITEMS = 20
         private const val DEFAULT_FOLDER_PATH = "/storage/emulated/0/Recordings/Record/Call"
         private const val DEFAULT_SERVER_BASE_URL = "https://chic-conversation-analyzer.onrender.com"
         private const val DEFAULT_UPLOAD_ENDPOINT = "api/v1/raw_audios"
@@ -161,3 +210,12 @@ class AppConfig private constructor(private val context: Context) {
         }
     }
 }
+
+data class SyncHistoryEntry(
+    val timestamp: Long,
+    val title: String,
+    val details: String,
+    val successCount: Int,
+    val failureCount: Int,
+    val totalCount: Int,
+)
