@@ -90,7 +90,7 @@ class UploadWorker(
             }
         }
 
-        val status = "เสร็จสิ้น: สำเร็จ=$successCount, ล้มเหลว=$failureCount, ทั้งหมด=${files.size}"
+        val status = "สถานะ : สำเร็จ = $successCount, ล้มเหลว = $failureCount, ทั้งหมด = ${files.size}"
         config.lastRunTime = System.currentTimeMillis()
         config.lastUploadResult = status
         config.lastPendingCount = FileScanner.scanEligibleFiles(config.folderPath, config.extensionFilter)
