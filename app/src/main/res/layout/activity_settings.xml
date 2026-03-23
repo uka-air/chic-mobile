@@ -13,14 +13,14 @@
             android:id="@+id/btnPickFolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pick folder (used for scan + delete)" />
+            android:text="@string/pick_folder" />
 
         <TextView
             android:id="@+id/txtFolderPermission"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="No SAF folder permission granted"
+            android:text="@string/no_saf_permission"
             android:textSize="12sp" />
 
         <TextView
@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Folder path: /storage/emulated/0/Recordings/Record/Call"
+            android:text="@string/folder_path_label"
             android:textSize="12sp" />
 
         <EditText
@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:hint="Upload interval (minutes)"
+            android:hint="@string/upload_interval_hint"
             android:inputType="number" />
 
         <Button
@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Save" />
+            android:text="@string/save" />
 
     </LinearLayout>
 </ScrollView>

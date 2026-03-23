@@ -23,14 +23,14 @@ class UploadWorker(
         Log.d(TAG, "Worker started")
 
         if (!config.setupComplete || !config.isConfigValid()) {
-            val message = "Setup incomplete or invalid config"
+            val message = "การตั้งค่ายังไม่ครบหรือไม่ถูกต้อง"
             Log.e(TAG, message)
             config.lastUploadResult = message
             return Result.success()
         }
 
         if (!config.allowMetered && isMeteredConnection()) {
-            val message = "Metered network detected and disallowed by settings"
+            val message = "ตรวจพบเครือข่ายแบบคิดค่าบริการตามปริมาณข้อมูลและไม่ได้รับอนุญาตจากการตั้งค่า"
             Log.d(TAG, message)
             config.lastUploadResult = message
             return Result.retry()
@@ -90,7 +90,7 @@ class UploadWorker(
             }
         }
 
-        val status = "Finished: success=$successCount, failures=$failureCount, total=${files.size}"
+        val status = "เสร็จสิ้น: สำเร็จ=$successCount, ล้มเหลว=$failureCount, ทั้งหมด=${files.size}"
         config.lastRunTime = System.currentTimeMillis()
         config.lastUploadResult = status
         config.lastPendingCount = FileScanner.scanEligibleFiles(config.folderPath, config.extensionFilter)

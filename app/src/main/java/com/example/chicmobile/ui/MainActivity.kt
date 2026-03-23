@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.chicmobile.R
 import com.example.chicmobile.config.AppConfig
 import com.example.chicmobile.databinding.ActivityMainBinding
 import com.example.chicmobile.file.FileScanner
@@ -25,7 +26,7 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { grants ->
             val granted = grants.values.all { it }
             if (!granted) {
-                Toast.makeText(this, "Storage permission is required to scan call recordings", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.storage_permission_required), Toast.LENGTH_LONG).show()
             }
             refreshStatus()
         }
@@ -44,11 +45,11 @@ class MainActivity : AppCompatActivity() {
         binding.btnRunNow.setOnClickListener {
             if (!hasStoragePermission()) {
                 requestStoragePermissionIfNeeded()
-                binding.txtLastResult.text = "Grant storage permission and try again"
+                binding.txtLastResult.text = getString(R.string.grant_permission_try_again)
                 return@setOnClickListener
             }
             WorkScheduler.runNow(this)
-            binding.txtLastResult.text = "Manual upload queued"
+            binding.txtLastResult.text = getString(R.string.manual_upload_queued)
         }
 
         if (!config.setupComplete) {
@@ -66,15 +67,23 @@ class MainActivity : AppCompatActivity() {
     private fun refreshStatus() {
         val configReady = config.isConfigValid()
         val storageGranted = hasStoragePermission()
-        binding.txtStatus.text = if (configReady && storageGranted) "Configured" else "Setup required"
+        binding.txtStatus.text = if (configReady && storageGranted) {
+            getString(R.string.status_configured)
+        } else {
+            getString(R.string.status_setup_required)
+        }
 
         val lastRun = if (config.lastRunTime == 0L) {
-            "Never"
+            getString(R.string.never)
         } else {
             DateFormat.getDateTimeInstance().format(Date(config.lastRunTime))
         }
         binding.txtLastRun.text = lastRun
-        binding.txtLastResult.text = if (storageGranted) config.lastUploadResult else "Grant storage permission to scan files"
+        binding.txtLastResult.text = if (storageGranted) {
+            config.lastUploadResult
+        } else {
+            getString(R.string.grant_permission_to_scan_files)
+        }
 
         val pending = if (storageGranted && config.folderPath.isNotBlank()) {
             FileScanner.scanEligibleFiles(config.folderPath, config.extensionFilter).size

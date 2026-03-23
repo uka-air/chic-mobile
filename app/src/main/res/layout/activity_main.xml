@@ -12,38 +12,38 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Uploader Status"
+            android:text="@string/uploader_status"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status:" />
+            android:text="@string/status_label" />
 
         <TextView
             android:id="@+id/txtStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unknown" />
+            android:text="@string/status_unknown" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Last run:" />
+            android:text="@string/last_run_label" />
 
         <TextView
             android:id="@+id/txtLastRun"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Never" />
+            android:text="@string/never" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Pending files:" />
+            android:text="@string/pending_files_label" />
 
         <TextView
             android:id="@+id/txtPending"
@@ -55,27 +55,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Last upload result:" />
+            android:text="@string/last_upload_result_label" />
 
         <TextView
             android:id="@+id/txtLastResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No uploads yet" />
+            android:text="@string/no_uploads_yet" />
 
         <Button
             android:id="@+id/btnRunNow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Run Upload Now" />
+            android:text="@string/run_upload_now" />
 
         <Button
             android:id="@+id/btnSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Settings" />
+            android:text="@string/settings" />
 
     </LinearLayout>
 </ScrollView>

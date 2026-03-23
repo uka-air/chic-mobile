@@ -1,4 +1,31 @@
 <resources>
-    <string name="app_name">Chic Mobile Uploader</string>
-    <string name="title_settings">Settings</string>
+    <string name="app_name">ตัวอัปโหลด Chic Mobile</string>
+    <string name="title_settings">การตั้งค่า</string>
+    <string name="uploader_status">สถานะตัวอัปโหลด</string>
+    <string name="status_label">สถานะ:</string>
+    <string name="status_unknown">ไม่ทราบ</string>
+    <string name="status_configured">ตั้งค่าเรียบร้อย</string>
+    <string name="status_setup_required">ต้องตั้งค่า</string>
+    <string name="last_run_label">รันล่าสุด:</string>
+    <string name="never">ไม่เคย</string>
+    <string name="pending_files_label">ไฟล์ที่รอดำเนินการ:</string>
+    <string name="last_upload_result_label">ผลการอัปโหลดล่าสุด:</string>
+    <string name="no_uploads_yet">ยังไม่มีการอัปโหลด</string>
+    <string name="run_upload_now">อัปโหลดตอนนี้</string>
+    <string name="settings">การตั้งค่า</string>
+    <string name="pick_folder">เลือกโฟลเดอร์ (ใช้สำหรับสแกนและลบ)</string>
+    <string name="no_saf_permission">ยังไม่ได้รับสิทธิ์โฟลเดอร์ SAF</string>
+    <string name="folder_path_label">พาธโฟลเดอร์:</string>
+    <string name="folder_path_template">พาธโฟลเดอร์: %1$s</string>
+    <string name="upload_interval_hint">ช่วงเวลาอัปโหลด (นาที)</string>
+    <string name="save">บันทึก</string>
+    <string name="storage_permission_required">จำเป็นต้องมีสิทธิ์เข้าถึงที่เก็บข้อมูลเพื่อสแกนไฟล์บันทึกการโทร</string>
+    <string name="grant_permission_try_again">โปรดให้สิทธิ์เข้าถึงที่เก็บข้อมูลแล้วลองอีกครั้ง</string>
+    <string name="manual_upload_queued">เพิ่มงานอัปโหลดด้วยตนเองเข้าคิวแล้ว</string>
+    <string name="grant_permission_to_scan_files">โปรดให้สิทธิ์เข้าถึงที่เก็บข้อมูลเพื่อสแกนไฟล์</string>
+    <string name="saf_permission_granted">ได้รับสิทธิ์ SAF แล้ว: %1$s</string>
+    <string name="interval_minimum">ช่วงเวลาต้องอย่างน้อย 15 นาที</string>
+    <string name="pick_folder_once">โปรดเลือกโฟลเดอร์หนึ่งครั้งเพื่อให้มีสิทธิ์สแกนและลบ</string>
+    <string name="pick_valid_folder">โปรดเลือกโฟลเดอร์ที่ถูกต้อง</string>
+    <string name="settings_saved">บันทึกการตั้งค่าแล้ว</string>
 </resources>
