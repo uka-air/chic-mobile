@@ -5,8 +5,11 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.text.InputType
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.example.chicmobile.config.AppConfig
@@ -38,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         config = AppConfig.getInstance(this)
 
         binding.btnSettings.setOnClickListener {
-            startActivity(Intent(this, SettingsActivity::class.java))
+            promptForSettingsPasscode()
         }
 
         binding.btnRunNow.setOnClickListener {
@@ -61,6 +64,27 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         refreshStatus()
+    }
+
+    private fun promptForSettingsPasscode() {
+        val input = EditText(this).apply {
+            hint = "Enter passcode"
+            inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+        }
+
+        AlertDialog.Builder(this)
+            .setTitle("Settings locked")
+            .setMessage("Enter the passcode to open settings.")
+            .setView(input)
+            .setPositiveButton("Unlock") { _, _ ->
+                if (input.text.toString() == SETTINGS_PASSCODE) {
+                    startActivity(Intent(this, SettingsActivity::class.java))
+                } else {
+                    Toast.makeText(this, "Incorrect passcode", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
     }
 
     private fun refreshStatus() {
@@ -105,5 +129,9 @@ class MainActivity : AppCompatActivity() {
         } else {
             listOf(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
+    }
+
+    companion object {
+        private const val SETTINGS_PASSCODE = "0101"
     }
 }
