@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/chic_black"
     android:padding="16dp">
 
     <LinearLayout
@@ -13,69 +14,82 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Uploader Status"
+            android:textColor="@color/chic_white"
             android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status:" />
+            android:text="Status:"
+            android:textColor="@color/chic_gray" />
 
         <TextView
             android:id="@+id/txtStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Unknown" />
+            android:text="Unknown"
+            android:textColor="@color/chic_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Last run:" />
+            android:text="Last run:"
+            android:textColor="@color/chic_gray" />
 
         <TextView
             android:id="@+id/txtLastRun"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Never" />
+            android:text="Never"
+            android:textColor="@color/chic_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Pending files:" />
+            android:text="Pending files:"
+            android:textColor="@color/chic_gray" />
 
         <TextView
             android:id="@+id/txtPending"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0" />
+            android:text="0"
+            android:textColor="@color/chic_white" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:text="Last upload result:" />
+            android:text="Last upload result:"
+            android:textColor="@color/chic_gray" />
 
         <TextView
             android:id="@+id/txtLastResult"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="No uploads yet" />
+            android:text="No uploads yet"
+            android:textColor="@color/chic_white" />
 
         <Button
             android:id="@+id/btnRunNow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Run Upload Now" />
+            android:backgroundTint="@color/chic_white"
+            android:text="Run Upload Now"
+            android:textColor="@color/chic_black" />
 
         <Button
             android:id="@+id/btnSettings"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="Settings" />
+            android:backgroundTint="@color/chic_white"
+            android:text="Settings"
+            android:textColor="@color/chic_black" />
 
     </LinearLayout>
 </ScrollView>

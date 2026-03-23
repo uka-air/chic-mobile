@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Chic Mobile Uploader</string>
     <string name="title_settings">Settings</string>
+    <string name="splash_logo_placeholder">Logo placeholder - replace with your final logo asset later</string>
 </resources>
