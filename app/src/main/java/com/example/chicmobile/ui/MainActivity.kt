@@ -6,7 +6,9 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
+import android.util.TypedValue
 import android.widget.EditText
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -67,15 +69,32 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun promptForSettingsPasscode() {
+        val horizontalMargin = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            24f,
+            resources.displayMetrics,
+        ).toInt()
         val input = EditText(this).apply {
             hint = "Enter passcode"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+        }
+        val inputContainer = FrameLayout(this).apply {
+            addView(
+                input,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                ).apply {
+                    leftMargin = horizontalMargin
+                    rightMargin = horizontalMargin
+                },
+            )
         }
 
         AlertDialog.Builder(this)
             .setTitle("Settings locked")
             .setMessage("Enter the passcode to open settings.")
-            .setView(input)
+            .setView(inputContainer)
             .setPositiveButton("Unlock") { _, _ ->
                 if (input.text.toString() == SETTINGS_PASSCODE) {
                     startActivity(Intent(this, SettingsActivity::class.java))
