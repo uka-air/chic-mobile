@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity() {
             hint = "กรุณาใส่รหัส"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
             setBackgroundResource(R.drawable.bg_textbox_solid_border)
-            setPadding(24, 16, 24, 16)
+            setPadding(12, 8, 12, 8)
             setTextColor(Color.BLACK)
             setHintTextColor(Color.DKGRAY)
         }

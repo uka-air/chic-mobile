@@ -44,8 +44,8 @@
             android:background="@drawable/bg_textbox_solid_border"
             android:hint="@string/upload_interval_hint"
             android:inputType="number"
-            android:paddingHorizontal="12dp"
-            android:paddingVertical="10dp"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="5dp"
             android:textColor="@color/chic_black"
             android:textColorHint="@color/chic_gray" />
 
