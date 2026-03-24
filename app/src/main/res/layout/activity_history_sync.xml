@@ -51,12 +51,19 @@
             android:text="Recent background uploads / ประวัติอัปโหลดเบื้องหลังล่าสุด"
             android:textColor="@color/chic_gray" />
 
-        <LinearLayout
-            android:id="@+id/historyContainer"
+        <HorizontalScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:orientation="vertical" />
+            android:fillViewport="true">
+
+            <TableLayout
+                android:id="@+id/historyTable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:stretchColumns="1,2,3,4"
+                android:shrinkColumns="*" />
+        </HorizontalScrollView>
 
     </LinearLayout>
 </ScrollView>

@@ -1,6 +1,8 @@
 package com.example.chicmobile.ui
 
+import android.graphics.Typeface
 import android.os.Bundle
+import android.widget.TableRow
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -59,44 +61,71 @@ class HistorySyncActivity : AppCompatActivity() {
             append("Last upload / ล่าสุด: $lastRun")
         }
 
-        renderHistory(config.getSyncHistory())
+        renderHistoryTable(config.getSyncHistory())
     }
 
-    private fun renderHistory(entries: List<SyncHistoryEntry>) {
-        binding.historyContainer.removeAllViews()
+    private fun renderHistoryTable(entries: List<SyncHistoryEntry>) {
+        binding.historyTable.removeAllViews()
+        binding.historyTable.addView(
+            createTableRow(
+                columns = listOf("Time", "Status", "Files", "OK", "Fail"),
+                isHeader = true,
+            )
+        )
 
         if (entries.isEmpty()) {
-            binding.historyContainer.addView(createHistoryTextView("No uploads yet / ยังไม่มีประวัติ"))
+            binding.historyTable.addView(
+                createTableRow(
+                    columns = listOf("No uploads yet / ยังไม่มีประวัติ", "-", "-", "-", "-"),
+                    isHeader = false,
+                )
+            )
             return
         }
 
-        entries.forEachIndexed { index, entry ->
-            val formattedTime = DateFormat.getDateTimeInstance().format(Date(entry.timestamp))
-            val statusLabel = when {
-                entry.failureCount == 0 && entry.totalCount > 0 -> "Success / สำเร็จ"
-                entry.failureCount > 0 && entry.successCount > 0 -> "Partial / สำเร็จบางส่วน"
-                entry.failureCount > 0 -> "Failed / ล้มเหลว"
-                else -> "Info / ข้อมูล"
+        entries.forEach { entry ->
+            val time = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+                .format(Date(entry.timestamp))
+            val status = when {
+                entry.failureCount == 0 && entry.totalCount > 0 -> "Success"
+                entry.failureCount > 0 && entry.successCount > 0 -> "Partial"
+                entry.failureCount > 0 -> "Failed"
+                else -> "Info"
             }
 
-            val text = buildString {
-                append("#${index + 1}  $formattedTime\n")
-                append("$statusLabel | Files: ${entry.totalCount} | OK: ${entry.successCount} | Fail: ${entry.failureCount}")
-                val shortDetails = entry.details.trim()
-                if (shortDetails.isNotEmpty() && shortDetails != entry.title.trim()) {
-                    append("\nReason / เหตุผล: $shortDetails")
-                }
-            }
-            binding.historyContainer.addView(createHistoryTextView(text))
+            binding.historyTable.addView(
+                createTableRow(
+                    columns = listOf(
+                        time,
+                        status,
+                        entry.totalCount.toString(),
+                        entry.successCount.toString(),
+                        entry.failureCount.toString(),
+                    ),
+                    isHeader = false,
+                )
+            )
         }
     }
 
-    private fun createHistoryTextView(text: String): TextView {
+    private fun createTableRow(columns: List<String>, isHeader: Boolean): TableRow {
+        return TableRow(this).apply {
+            columns.forEach { value ->
+                addView(createCell(value, isHeader))
+            }
+        }
+    }
+
+    private fun createCell(value: String, isHeader: Boolean): TextView {
         return TextView(this).apply {
-            this.text = text
+            text = value
             setTextColor(getColor(android.R.color.white))
-            textSize = 14f
-            setPadding(0, 0, 0, 24)
+            textSize = if (isHeader) 13f else 12f
+            if (isHeader) {
+                setTypeface(typeface, Typeface.BOLD)
+            }
+            setPadding(12, 8, 12, 8)
+            layoutParams = TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT)
         }
     }
 }
