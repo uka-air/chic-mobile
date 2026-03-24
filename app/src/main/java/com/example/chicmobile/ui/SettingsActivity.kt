@@ -7,6 +7,7 @@ import android.provider.DocumentsContract
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import com.example.chicmobile.R
 import com.example.chicmobile.config.AppConfig
 import com.example.chicmobile.databinding.ActivitySettingsBinding
 import com.example.chicmobile.work.WorkScheduler
@@ -24,12 +25,12 @@ class SettingsActivity : AppCompatActivity() {
             contentResolver.takePersistableUriPermission(uri, flags)
 
             config.folderTreeUri = uri.toString()
-            binding.txtFolderPermission.text = "SAF permission granted: $uri"
+            binding.txtFolderPermission.text = getString(R.string.saf_permission_granted, uri.toString())
 
             val resolvedPath = treeUriToPath(uri)
             if (resolvedPath != null) {
                 config.folderPath = resolvedPath
-                binding.txtFolderPath.text = "Folder path: $resolvedPath"
+                binding.txtFolderPath.text = getString(R.string.folder_path_template, resolvedPath)
             }
         }
 
@@ -53,23 +54,23 @@ class SettingsActivity : AppCompatActivity() {
 
     private fun loadValues() = with(binding) {
         edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
-        txtFolderPath.text = "Folder path: ${config.folderPath}"
+        txtFolderPath.text = getString(R.string.folder_path_template, config.folderPath)
         txtFolderPermission.text = if (config.folderTreeUri.isNotBlank()) {
-            "SAF permission granted: ${config.folderTreeUri}"
+            getString(R.string.saf_permission_granted, config.folderTreeUri)
         } else {
-            "No SAF folder permission granted"
+            getString(R.string.no_saf_permission)
         }
     }
 
     private fun saveValues() = with(binding) {
         val interval = edtIntervalMinutes.text.toString().toLongOrNull()
         if (interval == null || interval < 15L) {
-            Toast.makeText(this@SettingsActivity, "Interval must be at least 15 minutes", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@SettingsActivity, getString(R.string.interval_minimum), Toast.LENGTH_LONG).show()
             return
         }
 
         if (config.folderTreeUri.isBlank()) {
-            Toast.makeText(this@SettingsActivity, "Please pick folder once for scan/delete permission", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@SettingsActivity, getString(R.string.pick_folder_once), Toast.LENGTH_LONG).show()
             return
         }
 
@@ -77,13 +78,13 @@ class SettingsActivity : AppCompatActivity() {
         config.extensionFilter = "m4a"
 
         if (!config.isConfigValid()) {
-            Toast.makeText(this@SettingsActivity, "Please pick a valid folder", Toast.LENGTH_LONG).show()
+            Toast.makeText(this@SettingsActivity, getString(R.string.pick_valid_folder), Toast.LENGTH_LONG).show()
             return
         }
 
         config.setupComplete = true
         WorkScheduler.ensurePeriodicWork(this@SettingsActivity)
-        Toast.makeText(this@SettingsActivity, "Settings saved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this@SettingsActivity, getString(R.string.settings_saved), Toast.LENGTH_SHORT).show()
         finish()
     }
 
