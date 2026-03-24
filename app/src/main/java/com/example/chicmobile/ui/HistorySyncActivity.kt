@@ -27,11 +27,11 @@ class HistorySyncActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
         binding.btnSyncNow.setOnClickListener {
             if (!config.setupComplete || !config.isConfigValid()) {
-                Toast.makeText(this, "Complete setup before background upload / ตั้งค่าก่อนอัปโหลดเบื้องหลัง", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Complete setup first / ตั้งค่าให้เสร็จก่อน", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             WorkScheduler.runNow(this)
-            Toast.makeText(this, "Background upload queued / เพิ่มคิวอัปโหลดเบื้องหลังแล้ว", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Upload queued / เพิ่มคิวอัปโหลดแล้ว", Toast.LENGTH_SHORT).show()
             refreshContent()
         }
     }
@@ -54,10 +54,9 @@ class HistorySyncActivity : AppCompatActivity() {
         }
 
         binding.txtHistorySummary.text = buildString {
-            append("This page shows background upload history from this device / หน้านี้แสดงประวัติการอัปโหลดเบื้องหลังของเครื่องนี้\n")
-            append("Pending files / ไฟล์ที่รอส่ง: $pending\n")
-            append("Last upload time / เวลาอัปโหลดล่าสุด: $lastRun\n")
-            append("Last result / ผลลัพธ์ล่าสุด: ${config.lastUploadResult}")
+            append("This device upload history / ประวัติอัปโหลดของเครื่องนี้\n")
+            append("Pending / รอส่ง: $pending\n")
+            append("Last upload / ล่าสุด: $lastRun")
         }
 
         renderHistory(config.getSyncHistory())
@@ -67,11 +66,7 @@ class HistorySyncActivity : AppCompatActivity() {
         binding.historyContainer.removeAllViews()
 
         if (entries.isEmpty()) {
-            binding.historyContainer.addView(
-                createHistoryTextView(
-                    "No background upload history yet / ยังไม่มีประวัติการอัปโหลดเบื้องหลัง"
-                )
-            )
+            binding.historyContainer.addView(createHistoryTextView("No uploads yet / ยังไม่มีประวัติ"))
             return
         }
 
@@ -79,19 +74,18 @@ class HistorySyncActivity : AppCompatActivity() {
             val formattedTime = DateFormat.getDateTimeInstance().format(Date(entry.timestamp))
             val statusLabel = when {
                 entry.failureCount == 0 && entry.totalCount > 0 -> "Success / สำเร็จ"
-                entry.failureCount > 0 && entry.successCount > 0 -> "Partial success / สำเร็จบางส่วน"
+                entry.failureCount > 0 && entry.successCount > 0 -> "Partial / สำเร็จบางส่วน"
                 entry.failureCount > 0 -> "Failed / ล้มเหลว"
                 else -> "Info / ข้อมูล"
             }
+
             val text = buildString {
-                append("Upload #${index + 1} / รายการอัปโหลดที่ ${index + 1}\n")
-                append("Status / สถานะ: $statusLabel\n")
-                append("Event / เหตุการณ์: ${entry.title}\n")
-                append("Time / เวลา: $formattedTime\n")
-                append("Files attempted / จำนวนไฟล์ที่พยายามส่ง: ${entry.totalCount}\n")
-                append("Success / สำเร็จ: ${entry.successCount}\n")
-                append("Failed / ล้มเหลว: ${entry.failureCount}\n")
-                append("Details / รายละเอียด: ${entry.details}")
+                append("#${index + 1}  $formattedTime\n")
+                append("$statusLabel | Files: ${entry.totalCount} | OK: ${entry.successCount} | Fail: ${entry.failureCount}")
+                val shortDetails = entry.details.trim()
+                if (shortDetails.isNotEmpty() && shortDetails != entry.title.trim()) {
+                    append("\nReason / เหตุผล: $shortDetails")
+                }
             }
             binding.historyContainer.addView(createHistoryTextView(text))
         }
