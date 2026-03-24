@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             resources.displayMetrics,
         ).toInt()
         val input = EditText(this).apply {
-            hint = "Enter passcode"
+            hint = "กรุณาใ่ส่รหัส"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
         }
         val inputContainer = FrameLayout(this).apply {
