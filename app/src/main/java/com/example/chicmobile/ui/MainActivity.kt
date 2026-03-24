@@ -10,6 +10,7 @@ import android.text.InputType
 import android.util.TypedValue
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -112,13 +113,17 @@ class MainActivity : AppCompatActivity() {
             .setView(inputContainer)
             .setPositiveButton("ยืนยัน") { _, _ ->
                 if (input.text.toString() == SETTINGS_PASSCODE) {
-                    startActivity(Intent(this, SettingsActivity::class.java).putExtra("focus_phone_number", true))
+                    startActivity(Intent(this, SettingsActivity::class.java))
                 } else {
                     Toast.makeText(this, "ใส่รหัสผิด", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("ยกเลิก", null)
             .show()
+
+        input.requestFocus()
+        val imm = getSystemService(InputMethodManager::class.java)
+        imm?.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
 
         dialog.window?.decorView?.setBackgroundColor(Color.WHITE)
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(Color.BLACK)

@@ -4,7 +4,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -52,9 +51,6 @@ class SettingsActivity : AppCompatActivity() {
             saveValues()
         }
 
-        if (intent.getBooleanExtra("focus_phone_number", false)) {
-            focusPhoneNumberField()
-        }
     }
 
     private fun loadValues() = with(binding) {
@@ -95,13 +91,6 @@ class SettingsActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun focusPhoneNumberField() {
-        binding.edtPhoneNumber.post {
-            binding.edtPhoneNumber.requestFocus()
-            val imm = getSystemService(InputMethodManager::class.java)
-            imm?.showSoftInput(binding.edtPhoneNumber, InputMethodManager.SHOW_IMPLICIT)
-        }
-    }
 
     private fun treeUriToPath(uri: Uri): String? {
         return try {
