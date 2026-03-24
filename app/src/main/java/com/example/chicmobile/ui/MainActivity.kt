@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             .setView(inputContainer)
             .setPositiveButton("ยืนยัน") { _, _ ->
                 if (input.text.toString() == SETTINGS_PASSCODE) {
-                    startActivity(Intent(this, SettingsActivity::class.java))
+                    startActivity(Intent(this, SettingsActivity::class.java).putExtra("focus_phone_number", true))
                 } else {
                     Toast.makeText(this, "ใส่รหัสผิด", Toast.LENGTH_SHORT).show()
                 }

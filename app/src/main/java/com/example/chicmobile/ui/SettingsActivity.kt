@@ -4,6 +4,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.DocumentsContract
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -50,9 +51,14 @@ class SettingsActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             saveValues()
         }
+
+        if (intent.getBooleanExtra("focus_phone_number", false)) {
+            focusPhoneNumberField()
+        }
     }
 
     private fun loadValues() = with(binding) {
+        edtPhoneNumber.setText(config.phoneNumber)
         edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
         txtFolderPath.text = getString(R.string.folder_path_template, config.folderPath)
         txtFolderPermission.text = if (config.folderTreeUri.isNotBlank()) {
@@ -74,6 +80,7 @@ class SettingsActivity : AppCompatActivity() {
             return
         }
 
+        config.phoneNumber = edtPhoneNumber.text.toString()
         config.uploadIntervalMinutes = interval
         config.extensionFilter = "m4a"
 
@@ -86,6 +93,14 @@ class SettingsActivity : AppCompatActivity() {
         WorkScheduler.ensurePeriodicWork(this@SettingsActivity)
         Toast.makeText(this@SettingsActivity, getString(R.string.settings_saved), Toast.LENGTH_SHORT).show()
         finish()
+    }
+
+    private fun focusPhoneNumberField() {
+        binding.edtPhoneNumber.post {
+            binding.edtPhoneNumber.requestFocus()
+            val imm = getSystemService(InputMethodManager::class.java)
+            imm?.showSoftInput(binding.edtPhoneNumber, InputMethodManager.SHOW_IMPLICIT)
+        }
     }
 
     private fun treeUriToPath(uri: Uri): String? {
