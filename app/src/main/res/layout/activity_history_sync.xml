@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Device Upload History / ประวัติการอัปโหลดของเครื่องนี้"
+            android:text="ประวัติการอัปโหลดของเครื่องนี้"
             android:textColor="@color/chic_white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/chic_white"
-            android:text="Upload Now / อัปโหลดทันที"
+            android:text="อัปโหลดทันที"
             android:textColor="@color/chic_black" />
 
         <Button
@@ -41,14 +41,14 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:backgroundTint="@color/chic_white"
-            android:text="Back / กลับ"
+            android:text="กลับ"
             android:textColor="@color/chic_black" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Recent background uploads / ประวัติอัปโหลดเบื้องหลังล่าสุด"
+            android:text="ประวัติอัปโหลดล่าสุด"
             android:textColor="@color/chic_gray" />
 
         <HorizontalScrollView

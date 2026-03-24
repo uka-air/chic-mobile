@@ -29,11 +29,11 @@ class HistorySyncActivity : AppCompatActivity() {
         binding.btnBack.setOnClickListener { finish() }
         binding.btnSyncNow.setOnClickListener {
             if (!config.setupComplete || !config.isConfigValid()) {
-                Toast.makeText(this, "Complete setup first / ตั้งค่าให้เสร็จก่อน", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "กรุณาตั้งค่าก่อน", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
             WorkScheduler.runNow(this)
-            Toast.makeText(this, "Upload queued / เพิ่มคิวอัปโหลดแล้ว", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "เพิ่มคิวอัปโหลดแล้ว", Toast.LENGTH_SHORT).show()
             refreshContent()
         }
     }
@@ -50,15 +50,15 @@ class HistorySyncActivity : AppCompatActivity() {
             0
         }
         val lastRun = if (config.lastRunTime == 0L) {
-            "Never / ยังไม่เคย"
+            "ยังไม่มีประวัติการอัปโหลด"
         } else {
             DateFormat.getDateTimeInstance().format(Date(config.lastRunTime))
         }
 
         binding.txtHistorySummary.text = buildString {
-            append("This device upload history / ประวัติอัปโหลดของเครื่องนี้\n")
-            append("Pending / รอส่ง: $pending\n")
-            append("Last upload / ล่าสุด: $lastRun")
+            append("ประวัติอัปโหลดของเครื่องนี้\n")
+            append("รออัปโหลด: $pending\n")
+            append("อัปโหลดล่าสุด: $lastRun")
         }
 
         renderHistoryTable(config.getSyncHistory())
@@ -68,7 +68,7 @@ class HistorySyncActivity : AppCompatActivity() {
         binding.historyTable.removeAllViews()
         binding.historyTable.addView(
             createTableRow(
-                columns = listOf("Time", "Status", "Files", "OK", "Fail"),
+                columns = listOf("เวลา", "สถานะ", "ไฟล์", "สำเร็จ", "ล้มเหลว"),
                 isHeader = true,
             )
         )
@@ -76,7 +76,7 @@ class HistorySyncActivity : AppCompatActivity() {
         if (entries.isEmpty()) {
             binding.historyTable.addView(
                 createTableRow(
-                    columns = listOf("No uploads yet / ยังไม่มีประวัติ", "-", "-", "-", "-"),
+                    columns = listOf("ยังไม่มีประวัติ", "-", "-", "-", "-"),
                     isHeader = false,
                 )
             )
@@ -87,10 +87,10 @@ class HistorySyncActivity : AppCompatActivity() {
             val time = DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
                 .format(Date(entry.timestamp))
             val status = when {
-                entry.failureCount == 0 && entry.totalCount > 0 -> "Success"
-                entry.failureCount > 0 && entry.successCount > 0 -> "Partial"
-                entry.failureCount > 0 -> "Failed"
-                else -> "Info"
+                entry.failureCount == 0 && entry.totalCount > 0 -> "สำเร็จ"
+                entry.failureCount > 0 && entry.successCount > 0 -> "บางส่วน"
+                entry.failureCount > 0 -> "ล้มเหลว"
+                else -> "-"
             }
 
             binding.historyTable.addView(
