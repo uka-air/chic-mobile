@@ -14,6 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ChicMobile">
         <activity
+            android:name=".ui.HistorySyncActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.SettingsActivity"
             android:exported="false" />
         <activity

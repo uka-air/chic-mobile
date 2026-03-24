@@ -4,11 +4,12 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
+import android.provider.DocumentsContract
 import android.util.Log
-import androidx.documentfile.provider.DocumentFile
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.example.chicmobile.config.AppConfig
+import com.example.chicmobile.config.SyncHistoryEntry
 import com.example.chicmobile.file.FileScanner
 import com.example.chicmobile.network.UploadManager
 import com.example.chicmobile.network.UploadResult
@@ -26,6 +27,16 @@ class UploadWorker(
             val message = "การตั้งค่ายังไม่ครบหรือไม่ถูกต้อง"
             Log.e(TAG, message)
             config.lastUploadResult = message
+            config.appendSyncHistory(
+                SyncHistoryEntry(
+                    timestamp = System.currentTimeMillis(),
+                    title = "บล็อกการอัปโหลดเบื้องหลัง",
+                    details = message,
+                    successCount = 0,
+                    failureCount = 0,
+                    totalCount = 0,
+                )
+            )
             return Result.success()
         }
 
@@ -33,6 +44,16 @@ class UploadWorker(
             val message = "ตรวจพบเครือข่ายแบบคิดค่าบริการตามปริมาณข้อมูลและไม่ได้รับอนุญาตจากการตั้งค่า"
             Log.d(TAG, message)
             config.lastUploadResult = message
+            config.appendSyncHistory(
+                SyncHistoryEntry(
+                    timestamp = System.currentTimeMillis(),
+                    title = "เลื่อนการอัปโหลดเบื้องหลัง",
+                    details = message,
+                    successCount = 0,
+                    failureCount = 0,
+                    totalCount = 0,
+                )
+            )
             return Result.retry()
         }
 
@@ -91,8 +112,19 @@ class UploadWorker(
         }
 
         val status = "สถานะ : สำเร็จ = $successCount, ล้มเหลว = $failureCount, ทั้งหมด = ${files.size}"
+        val completedAt = System.currentTimeMillis()
         config.lastRunTime = System.currentTimeMillis()
         config.lastUploadResult = status
+        config.appendSyncHistory(
+            SyncHistoryEntry(
+                timestamp = completedAt,
+                title = if (failureCount == 0) "อัปโหลดเบื้องหลังเสร็จสิ้น" else "อัปโหลดเบื้องหลังเสร็จสิ้นแต่มีปัญหา",
+                details = status,
+                successCount = successCount,
+                failureCount = failureCount,
+                totalCount = files.size,
+            )
+        )
         config.lastPendingCount = FileScanner.scanEligibleFiles(config.folderPath, config.extensionFilter)
             .count { !config.hasUploadedFingerprint(fileFingerprint(it)) }
         Log.d(TAG, "Worker finish: $status")
@@ -108,14 +140,33 @@ class UploadWorker(
     private fun deleteViaSafTree(treeUriString: String, fileName: String): Boolean {
         if (treeUriString.isBlank()) return false
         return try {
+            val resolver = applicationContext.contentResolver
             val treeUri = Uri.parse(treeUriString)
-            val tree = DocumentFile.fromTreeUri(applicationContext, treeUri) ?: return false
-            val target = tree.findFile(fileName) ?: return false
-            val deleted = target.delete()
-            if (deleted) {
-                Log.d(TAG, "Deleted via SAF tree: $fileName")
+            val treeDocumentId = DocumentsContract.getTreeDocumentId(treeUri)
+            val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, treeDocumentId)
+
+            val projection = arrayOf(
+                DocumentsContract.Document.COLUMN_DOCUMENT_ID,
+                DocumentsContract.Document.COLUMN_DISPLAY_NAME,
+            )
+
+            resolver.query(childrenUri, projection, null, null, null)?.use { cursor ->
+                val idIndex = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_DOCUMENT_ID)
+                val nameIndex = cursor.getColumnIndex(DocumentsContract.Document.COLUMN_DISPLAY_NAME)
+                while (cursor.moveToNext()) {
+                    val displayName = if (nameIndex >= 0) cursor.getString(nameIndex) else null
+                    if (displayName == fileName && idIndex >= 0) {
+                        val docId = cursor.getString(idIndex)
+                        val documentUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, docId)
+                        val deleted = DocumentsContract.deleteDocument(resolver, documentUri)
+                        if (deleted) {
+                            Log.d(TAG, "Deleted via SAF tree: $fileName")
+                        }
+                        return deleted
+                    }
+                }
             }
-            deleted
+            false
         } catch (e: Exception) {
             Log.e(TAG, "SAF delete failed for $fileName", e)
             false

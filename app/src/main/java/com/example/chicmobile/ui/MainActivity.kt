@@ -47,6 +47,10 @@ class MainActivity : AppCompatActivity() {
             promptForSettingsPasscode()
         }
 
+        binding.btnHistorySync.setOnClickListener {
+            startActivity(Intent(this, HistorySyncActivity::class.java))
+        }
+
         binding.btnRunNow.setOnClickListener {
             if (!hasStoragePermission()) {
                 requestStoragePermissionIfNeeded()
@@ -76,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             resources.displayMetrics,
         ).toInt()
         val input = EditText(this).apply {
-            hint = "กรุณาใ่ส่รหัส"
+            hint = "กรุณาใส่รหัส"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
         }
         val inputContainer = FrameLayout(this).apply {
