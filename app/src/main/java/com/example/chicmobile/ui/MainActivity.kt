@@ -82,7 +82,7 @@ class MainActivity : AppCompatActivity() {
         ).toInt()
         val topMargin = TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,
-            8f,
+            20f,
             resources.displayMetrics,
         ).toInt()
         val input = EditText(this).apply {
