@@ -110,7 +110,7 @@ class HistorySyncActivity : AppCompatActivity() {
     private fun createCell(value: String, isHeader: Boolean): TextView {
         return TextView(this).apply {
             text = value
-            setTextColor(getColor(android.R.color.white))
+            setTextColor(getColor(android.R.color.darker_gray))
             textSize = if (isHeader) 13f else 12f
             if (isHeader) {
                 setTypeface(typeface, Typeface.BOLD)
