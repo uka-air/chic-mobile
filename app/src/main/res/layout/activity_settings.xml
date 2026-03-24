@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/chic_black"
     android:padding="16dp">
 
     <LinearLayout
@@ -13,7 +14,9 @@
             android:id="@+id/btnPickFolder"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/pick_folder" />
+            android:text="@string/pick_folder"
+            android:backgroundTint="@color/chic_white"
+            android:textColor="@color/chic_black" />
 
         <TextView
             android:id="@+id/txtFolderPermission"
@@ -21,6 +24,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/no_saf_permission"
+            android:textColor="@color/chic_white"
             android:textSize="12sp" />
 
         <TextView
@@ -29,6 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/folder_path_label"
+            android:textColor="@color/chic_white"
             android:textSize="12sp" />
 
         <EditText
@@ -37,14 +42,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:hint="@string/upload_interval_hint"
-            android:inputType="number" />
+            android:inputType="number"
+            android:backgroundTint="@color/chic_white"
+            android:textColor="@color/chic_white"
+            android:textColorHint="@color/chic_gray" />
 
         <Button
             android:id="@+id/btnSave"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/save" />
+            android:text="@string/save"
+            android:backgroundTint="@color/chic_white"
+            android:textColor="@color/chic_black" />
 
     </LinearLayout>
 </ScrollView>
