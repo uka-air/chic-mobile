@@ -3,6 +3,7 @@ package com.example.chicmobile.ui
 import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.text.InputType
@@ -82,6 +83,9 @@ class MainActivity : AppCompatActivity() {
         val input = EditText(this).apply {
             hint = "กรุณาใส่รหัส"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
+            setBackgroundColor(Color.WHITE)
+            setTextColor(Color.BLACK)
+            setHintTextColor(Color.DKGRAY)
         }
         val inputContainer = FrameLayout(this).apply {
             addView(
@@ -96,7 +100,7 @@ class MainActivity : AppCompatActivity() {
             )
         }
 
-        AlertDialog.Builder(this)
+        val dialog = AlertDialog.Builder(this)
             .setTitle("การเข้าถึงถูกจำกัด")
             .setMessage("กรุณาใส่รหัส")
             .setView(inputContainer)
@@ -109,6 +113,10 @@ class MainActivity : AppCompatActivity() {
             }
             .setNegativeButton("ยกเลิก", null)
             .show()
+
+        dialog.window?.decorView?.setBackgroundColor(Color.WHITE)
+        dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(Color.BLACK)
+        dialog.getButton(AlertDialog.BUTTON_NEGATIVE)?.setTextColor(Color.BLACK)
     }
 
     private fun refreshStatus() {
