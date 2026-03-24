@@ -18,12 +18,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/chic_black"
-            android:contentDescription="@string/splash_logo_placeholder"
             android:padding="24dp"
             android:scaleType="centerInside"
-            android:src="@android:drawable/sym_def_app_icon"
-            app:tint="@color/chic_white" />
+            android:src="@drawable/logo"/>
     </FrameLayout>
 
     <TextView
