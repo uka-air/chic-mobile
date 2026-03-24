@@ -15,7 +15,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/pick_folder"
-            android:textColor="@color/chic_black" />
+            android:backgroundTint="@color/chic_black"
+            android:textColor="@color/chic_white" />
 
         <TextView
             android:id="@+id/txtFolderPermission"
