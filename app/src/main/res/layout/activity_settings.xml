@@ -44,6 +44,7 @@
             android:background="@drawable/bg_textbox_solid_border"
             android:hint="@string/phone_number_hint"
             android:inputType="phone"
+            android:maxLength="10"
             android:paddingHorizontal="6dp"
             android:paddingVertical="5dp"
             android:textColor="@color/chic_black"
