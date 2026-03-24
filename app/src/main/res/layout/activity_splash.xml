@@ -9,8 +9,8 @@
     android:padding="24dp">
 
     <FrameLayout
-        android:layout_width="140dp"
-        android:layout_height="140dp"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:background="@color/chic_white"
         android:foregroundGravity="center"
         android:padding="1dp">
@@ -18,7 +18,7 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="24dp"
+            android:padding="12dp"
             android:scaleType="centerInside"
             android:src="@drawable/logo"/>
 
