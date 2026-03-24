@@ -80,10 +80,16 @@ class MainActivity : AppCompatActivity() {
             24f,
             resources.displayMetrics,
         ).toInt()
+        val topMargin = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            20f,
+            resources.displayMetrics,
+        ).toInt()
         val input = EditText(this).apply {
             hint = "กรุณาใส่รหัส"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
-            setBackgroundColor(Color.WHITE)
+            setBackgroundResource(R.drawable.bg_textbox_solid_border)
+            setPadding(12, 8, 12, 8)
             setTextColor(Color.BLACK)
             setHintTextColor(Color.DKGRAY)
         }
@@ -96,15 +102,15 @@ class MainActivity : AppCompatActivity() {
                 ).apply {
                     leftMargin = horizontalMargin
                     rightMargin = horizontalMargin
+                    this.topMargin = topMargin
                 },
             )
         }
 
         val dialog = AlertDialog.Builder(this)
             .setTitle("การเข้าถึงถูกจำกัด")
-            .setMessage("กรุณาใส่รหัส")
             .setView(inputContainer)
-            .setPositiveButton("ปลดล็อคสำเร็จ") { _, _ ->
+            .setPositiveButton("ยืนยัน") { _, _ ->
                 if (input.text.toString() == SETTINGS_PASSCODE) {
                     startActivity(Intent(this, SettingsActivity::class.java))
                 } else {
