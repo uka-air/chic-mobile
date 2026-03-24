@@ -30,7 +30,7 @@ class UploadWorker(
             config.appendSyncHistory(
                 SyncHistoryEntry(
                     timestamp = System.currentTimeMillis(),
-                    title = "History sync blocked / บล็อกการซิงก์ประวัติ",
+                    title = "Background upload blocked / บล็อกการอัปโหลดเบื้องหลัง",
                     details = message,
                     successCount = 0,
                     failureCount = 0,
@@ -47,7 +47,7 @@ class UploadWorker(
             config.appendSyncHistory(
                 SyncHistoryEntry(
                     timestamp = System.currentTimeMillis(),
-                    title = "History sync delayed / เลื่อนการซิงก์ประวัติ",
+                    title = "Background upload delayed / เลื่อนการอัปโหลดเบื้องหลัง",
                     details = message,
                     successCount = 0,
                     failureCount = 0,
@@ -118,7 +118,7 @@ class UploadWorker(
         config.appendSyncHistory(
             SyncHistoryEntry(
                 timestamp = completedAt,
-                title = if (failureCount == 0) "History sync completed / ซิงก์ประวัติเสร็จสิ้น" else "History sync completed with issues / ซิงก์ประวัติเสร็จสิ้นแต่มีปัญหา",
+                title = if (failureCount == 0) "Background upload completed / อัปโหลดเบื้องหลังเสร็จสิ้น" else "Background upload completed with issues / อัปโหลดเบื้องหลังเสร็จสิ้นแต่มีปัญหา",
                 details = status,
                 successCount = successCount,
                 failureCount = failureCount,

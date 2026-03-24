@@ -13,7 +13,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="History Sync / ซิงก์ประวัติ"
+            android:text="Device Upload History / ประวัติการอัปโหลดของเครื่องนี้"
             android:textColor="@color/chic_white"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -32,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:backgroundTint="@color/chic_white"
-            android:text="Sync History Now / ซิงก์ประวัติทันที"
+            android:text="Upload Now / อัปโหลดทันที"
             android:textColor="@color/chic_black" />
 
         <Button
@@ -48,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Recent sync history / ประวัติการซิงก์ล่าสุด"
+            android:text="Recent background uploads / ประวัติอัปโหลดเบื้องหลังล่าสุด"
             android:textColor="@color/chic_gray" />
 
         <LinearLayout
