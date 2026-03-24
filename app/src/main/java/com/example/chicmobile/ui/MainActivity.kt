@@ -109,7 +109,6 @@ class MainActivity : AppCompatActivity() {
 
         val dialog = AlertDialog.Builder(this)
             .setTitle("การเข้าถึงถูกจำกัด")
-            .setMessage("กรุณาใส่รหัส")
             .setView(inputContainer)
             .setPositiveButton("ยืนยัน") { _, _ ->
                 if (input.text.toString() == SETTINGS_PASSCODE) {
