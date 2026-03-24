@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             .setTitle("การเข้าถึงถูกจำกัด")
             .setMessage("กรุณาใส่รหัส")
             .setView(inputContainer)
-            .setPositiveButton("ปลดล็อคสำเร็จ") { _, _ ->
+            .setPositiveButton("ยืนยัน") { _, _ ->
                 if (input.text.toString() == SETTINGS_PASSCODE) {
                     startActivity(Intent(this, SettingsActivity::class.java))
                 } else {
