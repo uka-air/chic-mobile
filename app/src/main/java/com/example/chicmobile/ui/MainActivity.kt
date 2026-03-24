@@ -83,7 +83,8 @@ class MainActivity : AppCompatActivity() {
         val input = EditText(this).apply {
             hint = "กรุณาใส่รหัส"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
-            setBackgroundColor(Color.WHITE)
+            setBackgroundResource(R.drawable.bg_textbox_solid_border)
+            setPadding(24, 16, 24, 16)
             setTextColor(Color.BLACK)
             setHintTextColor(Color.DKGRAY)
         }
