@@ -85,7 +85,7 @@ class AppConfig private constructor(private val context: Context) {
         set(value) = prefs.edit().putLong(KEY_LAST_RUN_TIME, value).apply()
 
     var lastUploadResult: String
-        get() = prefs.getString(KEY_LAST_UPLOAD_RESULT, "No uploads yet") ?: "No uploads yet"
+        get() = prefs.getString(KEY_LAST_UPLOAD_RESULT, "ยังไม่มีการอัปโหลด") ?: "ยังไม่มีการอัปโหลด"
         set(value) = prefs.edit().putString(KEY_LAST_UPLOAD_RESULT, value).apply()
 
     var lastPendingCount: Int

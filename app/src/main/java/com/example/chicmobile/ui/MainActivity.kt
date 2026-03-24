@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.chicmobile.R
 import com.example.chicmobile.config.AppConfig
 import com.example.chicmobile.databinding.ActivityMainBinding
 import com.example.chicmobile.file.FileScanner
@@ -30,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { grants ->
             val granted = grants.values.all { it }
             if (!granted) {
-                Toast.makeText(this, "Storage permission is required to scan call recordings", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, getString(R.string.storage_permission_required), Toast.LENGTH_LONG).show()
             }
             refreshStatus()
         }
@@ -53,11 +54,11 @@ class MainActivity : AppCompatActivity() {
         binding.btnRunNow.setOnClickListener {
             if (!hasStoragePermission()) {
                 requestStoragePermissionIfNeeded()
-                binding.txtLastResult.text = "Grant storage permission and try again"
+                binding.txtLastResult.text = getString(R.string.grant_permission_try_again)
                 return@setOnClickListener
             }
             WorkScheduler.runNow(this)
-            binding.txtLastResult.text = "Manual upload queued"
+            binding.txtLastResult.text = getString(R.string.manual_upload_queued)
         }
 
         if (!config.setupComplete) {
@@ -79,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             resources.displayMetrics,
         ).toInt()
         val input = EditText(this).apply {
-            hint = "Enter passcode"
+            hint = "กรุณาใ่ส่รหัส"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
         }
         val inputContainer = FrameLayout(this).apply {
@@ -96,32 +97,40 @@ class MainActivity : AppCompatActivity() {
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Settings locked")
-            .setMessage("Enter the passcode to open settings.")
+            .setTitle("การเข้าถึงถูกจำกัด")
+            .setMessage("กรุณาใส่รหัส")
             .setView(inputContainer)
-            .setPositiveButton("Unlock") { _, _ ->
+            .setPositiveButton("ปลดล็อคสำเร็จ") { _, _ ->
                 if (input.text.toString() == SETTINGS_PASSCODE) {
                     startActivity(Intent(this, SettingsActivity::class.java))
                 } else {
-                    Toast.makeText(this, "Incorrect passcode", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "ใส่รหัสผิด", Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("ยกเลิก", null)
             .show()
     }
 
     private fun refreshStatus() {
         val configReady = config.isConfigValid()
         val storageGranted = hasStoragePermission()
-        binding.txtStatus.text = if (configReady && storageGranted) "Configured" else "Setup required"
+        binding.txtStatus.text = if (configReady && storageGranted) {
+            getString(R.string.status_configured)
+        } else {
+            getString(R.string.status_setup_required)
+        }
 
         val lastRun = if (config.lastRunTime == 0L) {
-            "Never"
+            getString(R.string.never)
         } else {
             DateFormat.getDateTimeInstance().format(Date(config.lastRunTime))
         }
         binding.txtLastRun.text = lastRun
-        binding.txtLastResult.text = if (storageGranted) config.lastUploadResult else "Grant storage permission to scan files"
+        binding.txtLastResult.text = if (storageGranted) {
+            config.lastUploadResult
+        } else {
+            getString(R.string.grant_permission_to_scan_files)
+        }
 
         val pending = if (storageGranted && config.folderPath.isNotBlank()) {
             FileScanner.scanEligibleFiles(config.folderPath, config.extensionFilter).size

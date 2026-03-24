@@ -26,19 +26,19 @@ class UploadManager(private val config: AppConfig) {
         val presignUrl = "$baseUrl/api/v1/presigns"
 
         if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
-            val message = "Invalid serverBaseUrl: '$baseUrl'."
+            val message = "ค่า serverBaseUrl ไม่ถูกต้อง: '$baseUrl'"
             Log.e(TAG, message)
             return UploadResult.Failure(message)
         }
 
         if (!rawAudioUrl.startsWith("http://") && !rawAudioUrl.startsWith("https://")) {
-            val message = "Invalid upload URL config: '$rawAudioUrl'."
+            val message = "ค่าการตั้งค่า URL อัปโหลดไม่ถูกต้อง: '$rawAudioUrl'"
             Log.e(TAG, message)
             return UploadResult.Failure(message)
         }
 
         return try {
-            val presign = fetchPresign(presignUrl) ?: return UploadResult.Retryable("Could not fetch presign")
+            val presign = fetchPresign(presignUrl) ?: return UploadResult.Retryable("ไม่สามารถขอ presign ได้")
 
             val uploadResult = uploadToPresignedUrl(presign.url, file)
             if (uploadResult != UploadResult.Success) {
@@ -48,7 +48,7 @@ class UploadManager(private val config: AppConfig) {
             notifyRawAudio(rawAudioUrl, presign.key)
         } catch (e: Exception) {
             Log.e(TAG, "Upload flow failed", e)
-            UploadResult.Retryable("Exception: ${e.message}")
+            UploadResult.Retryable("เกิดข้อผิดพลาด: ${e.message}")
         }
     }
 
@@ -82,7 +82,7 @@ class UploadManager(private val config: AppConfig) {
 
     private fun uploadToPresignedUrl(url: String, file: File): UploadResult {
         if (!url.startsWith("http://") && !url.startsWith("https://")) {
-            return UploadResult.Failure("Invalid presigned URL: '$url'")
+            return UploadResult.Failure("URL presigned ไม่ถูกต้อง: '$url'")
         }
 
         val request = Request.Builder()
@@ -96,8 +96,8 @@ class UploadManager(private val config: AppConfig) {
             Log.d(TAG, "Presigned upload response code=${response.code} body=$responseBody")
             return when {
                 response.isSuccessful -> UploadResult.Success
-                response.code in 500..599 || response.code == 429 -> UploadResult.Retryable("Presigned upload temporary error: ${response.code}")
-                else -> UploadResult.Failure("Presigned upload rejected: ${response.code} $responseBody")
+                response.code in 500..599 || response.code == 429 -> UploadResult.Retryable("การอัปโหลดผ่าน presigned URL ขัดข้องชั่วคราว: ${response.code}")
+                else -> UploadResult.Failure("การอัปโหลดผ่าน presigned URL ถูกปฏิเสธ: ${response.code} $responseBody")
             }
         }
     }
@@ -117,8 +117,8 @@ class UploadManager(private val config: AppConfig) {
             Log.d(TAG, "raw_audios response code=${response.code} body=$responseBody")
             return when {
                 response.isSuccessful -> UploadResult.Success
-                response.code in 500..599 || response.code == 429 -> UploadResult.Retryable("raw_audios temporary error: ${response.code}")
-                else -> UploadResult.Failure("raw_audios rejected: ${response.code} $responseBody")
+                response.code in 500..599 || response.code == 429 -> UploadResult.Retryable("raw_audios ขัดข้องชั่วคราว: ${response.code}")
+                else -> UploadResult.Failure("raw_audios ถูกปฏิเสธ: ${response.code} $responseBody")
             }
         }
     }

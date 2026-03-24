@@ -1,17 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Theme.ChicMobile" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="colorPrimary">@color/chic_black</item>
-        <item name="colorPrimaryVariant">@color/chic_black</item>
-        <item name="colorOnPrimary">@color/chic_white</item>
-        <item name="colorSecondary">@color/chic_white</item>
-        <item name="colorOnSecondary">@color/chic_black</item>
-        <item name="colorSurface">@color/chic_black</item>
-        <item name="colorOnSurface">@color/chic_white</item>
-        <item name="android:colorBackground">@color/chic_black</item>
-        <item name="android:textColorPrimary">@color/chic_white</item>
+        <item name="colorPrimary">@color/chic_white</item>
+        <item name="colorPrimaryVariant">@color/chic_white</item>
+        <item name="colorOnPrimary">@color/chic_black</item>
+        <item name="colorSecondary">@color/chic_black</item>
+        <item name="colorOnSecondary">@color/chic_white</item>
+        <item name="colorSurface">@color/chic_white</item>
+        <item name="colorOnSurface">@color/chic_black</item>
+        <item name="android:colorBackground">@color/chic_white</item>
+        <item name="android:textColorPrimary">@color/chic_black</item>
         <item name="android:textColorSecondary">@color/chic_gray</item>
-        <item name="android:windowBackground">@color/chic_black</item>
-        <item name="android:statusBarColor" tools:targetApi="l">@color/chic_black</item>
-        <item name="android:navigationBarColor" tools:targetApi="o_mr1">@color/chic_black</item>
+        <item name="android:windowBackground">@color/chic_white</item>
+        <item name="android:statusBarColor" tools:targetApi="l">@color/chic_white</item>
+        <item name="android:navigationBarColor" tools:targetApi="o_mr1">@color/chic_white</item>
     </style>
 </resources>
