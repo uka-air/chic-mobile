@@ -80,6 +80,11 @@ class MainActivity : AppCompatActivity() {
             24f,
             resources.displayMetrics,
         ).toInt()
+        val topMargin = TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            8f,
+            resources.displayMetrics,
+        ).toInt()
         val input = EditText(this).apply {
             hint = "กรุณาใส่รหัส"
             inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_VARIATION_PASSWORD
@@ -97,6 +102,7 @@ class MainActivity : AppCompatActivity() {
                 ).apply {
                     leftMargin = horizontalMargin
                     rightMargin = horizontalMargin
+                    this.topMargin = topMargin
                 },
             )
         }
