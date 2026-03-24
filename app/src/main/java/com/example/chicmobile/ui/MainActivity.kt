@@ -120,16 +120,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             .setNegativeButton("ยกเลิก", null)
-            .show()
+            .create()
 
         dialog.setOnShowListener {
             input.requestFocus()
-            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            input.isFocusableInTouchMode = true
             input.post {
                 val imm = getSystemService(InputMethodManager::class.java)
-                imm?.showSoftInput(input, InputMethodManager.SHOW_FORCED)
+                imm?.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
             }
         }
+
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        dialog.show()
 
         dialog.window?.decorView?.setBackgroundColor(Color.WHITE)
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(Color.BLACK)
