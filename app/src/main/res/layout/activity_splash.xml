@@ -32,13 +32,4 @@
         android:textColor="@color/chic_black"
         android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="@string/splash_logo_placeholder"
-        android:textColor="@color/chic_gray"
-        android:textSize="14sp" />
-
 </LinearLayout>
