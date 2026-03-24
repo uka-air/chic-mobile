@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/chic_black"
+    android:background="@color/chic_white"
     android:padding="16dp">
 
     <LinearLayout
@@ -15,7 +15,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/pick_folder"
-            android:backgroundTint="@color/chic_white"
             android:textColor="@color/chic_black" />
 
         <TextView
@@ -24,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/no_saf_permission"
-            android:textColor="@color/chic_white"
+            android:textColor="@color/chic_black"
             android:textSize="12sp" />
 
         <TextView
@@ -33,7 +32,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/folder_path_label"
-            android:textColor="@color/chic_white"
+            android:textColor="@color/chic_black"
             android:textSize="12sp" />
 
         <EditText
@@ -44,7 +43,7 @@
             android:hint="@string/upload_interval_hint"
             android:inputType="number"
             android:backgroundTint="@color/chic_white"
-            android:textColor="@color/chic_white"
+            android:textColor="@color/chic_black"
             android:textColorHint="@color/chic_gray" />
 
         <Button
@@ -53,8 +52,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="@string/save"
-            android:backgroundTint="@color/chic_white"
-            android:textColor="@color/chic_black" />
+            android:backgroundTint="@color/chic_black"
+            android:textColor="@color/chic_white" />
 
     </LinearLayout>
 </ScrollView>

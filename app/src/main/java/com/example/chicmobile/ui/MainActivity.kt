@@ -93,17 +93,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         AlertDialog.Builder(this)
-            .setTitle("Settings locked")
-            .setMessage("Enter the passcode to open settings.")
+            .setTitle("การเข้าถึงถูกจำกัด")
+            .setMessage("กรุณาใส่รหัส")
             .setView(inputContainer)
-            .setPositiveButton("Unlock") { _, _ ->
+            .setPositiveButton("ปลดล็อคสำเร็จ") { _, _ ->
                 if (input.text.toString() == SETTINGS_PASSCODE) {
                     startActivity(Intent(this, SettingsActivity::class.java))
                 } else {
-                    Toast.makeText(this, "Incorrect passcode", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "ใส่รหัสผิด", Toast.LENGTH_SHORT).show()
                 }
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("ยกเลิก", null)
             .show()
     }
 
