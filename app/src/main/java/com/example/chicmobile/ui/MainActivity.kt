@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
+import android.view.WindowManager
 import android.os.Bundle
 import android.text.InputType
 import android.util.TypedValue
@@ -121,9 +122,14 @@ class MainActivity : AppCompatActivity() {
             .setNegativeButton("ยกเลิก", null)
             .show()
 
-        input.requestFocus()
-        val imm = getSystemService(InputMethodManager::class.java)
-        imm?.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
+        dialog.setOnShowListener {
+            input.requestFocus()
+            dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+            input.post {
+                val imm = getSystemService(InputMethodManager::class.java)
+                imm?.showSoftInput(input, InputMethodManager.SHOW_FORCED)
+            }
+        }
 
         dialog.window?.decorView?.setBackgroundColor(Color.WHITE)
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(Color.BLACK)
