@@ -50,9 +50,11 @@ class SettingsActivity : AppCompatActivity() {
         binding.btnSave.setOnClickListener {
             saveValues()
         }
+
     }
 
     private fun loadValues() = with(binding) {
+        edtPhoneNumber.setText(config.phoneNumber)
         edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
         txtFolderPath.text = getString(R.string.folder_path_template, config.folderPath)
         txtFolderPermission.text = if (config.folderTreeUri.isNotBlank()) {
@@ -74,6 +76,7 @@ class SettingsActivity : AppCompatActivity() {
             return
         }
 
+        config.phoneNumber = edtPhoneNumber.text.toString()
         config.uploadIntervalMinutes = interval
         config.extensionFilter = "m4a"
 
@@ -87,6 +90,7 @@ class SettingsActivity : AppCompatActivity() {
         Toast.makeText(this@SettingsActivity, getString(R.string.settings_saved), Toast.LENGTH_SHORT).show()
         finish()
     }
+
 
     private fun treeUriToPath(uri: Uri): String? {
         return try {

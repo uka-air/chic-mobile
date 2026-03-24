@@ -5,11 +5,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
+import android.view.WindowManager
 import android.os.Bundle
 import android.text.InputType
 import android.util.TypedValue
 import android.widget.EditText
 import android.widget.FrameLayout
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -118,7 +120,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             .setNegativeButton("ยกเลิก", null)
-            .show()
+            .create()
+
+        dialog.setOnShowListener {
+            input.requestFocus()
+            input.isFocusableInTouchMode = true
+            input.post {
+                val imm = getSystemService(InputMethodManager::class.java)
+                imm?.showSoftInput(input, InputMethodManager.SHOW_IMPLICIT)
+            }
+        }
+
+        dialog.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
+        dialog.show()
 
         dialog.window?.decorView?.setBackgroundColor(Color.WHITE)
         dialog.getButton(AlertDialog.BUTTON_POSITIVE)?.setTextColor(Color.BLACK)

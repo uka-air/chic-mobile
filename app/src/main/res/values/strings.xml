@@ -18,6 +18,7 @@
     <string name="no_saf_permission">ยังไม่ได้รับสิทธิ์โฟลเดอร์ SAF</string>
     <string name="folder_path_label">พาธโฟลเดอร์:</string>
     <string name="folder_path_template">พาธโฟลเดอร์: %1$s</string>
+    <string name="phone_number_hint">เบอร์โทรศัพท์</string>
     <string name="upload_interval_hint">ช่วงเวลาอัปโหลด (นาที)</string>
     <string name="save">บันทึก</string>
     <string name="storage_permission_required">จำเป็นต้องมีสิทธิ์เข้าถึงที่เก็บข้อมูลเพื่อสแกนไฟล์บันทึกการโทร</string>

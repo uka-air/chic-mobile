@@ -48,6 +48,10 @@ class AppConfig private constructor(private val context: Context) {
         get() = prefs.getString(KEY_SITE_ID, "") ?: ""
         set(value) = prefs.edit().putString(KEY_SITE_ID, value.trim()).apply()
 
+    var phoneNumber: String
+        get() = prefs.getString(KEY_PHONE_NUMBER, "") ?: ""
+        set(value) = prefs.edit().putString(KEY_PHONE_NUMBER, value.trim()).apply()
+
     var uploadIntervalMinutes: Long
         get() = prefs.getLong(KEY_UPLOAD_INTERVAL_MINUTES, 15L)
         set(value) = prefs.edit().putLong(KEY_UPLOAD_INTERVAL_MINUTES, value).apply()
@@ -182,6 +186,7 @@ class AppConfig private constructor(private val context: Context) {
         private const val KEY_AUTH_TOKEN = "auth_token"
         private const val KEY_DEVICE_ID = "device_id"
         private const val KEY_SITE_ID = "site_id"
+        private const val KEY_PHONE_NUMBER = "phone_number"
         private const val KEY_UPLOAD_INTERVAL_MINUTES = "upload_interval_minutes"
         private const val KEY_FOLDER_PATH = "folder_path"
         private const val KEY_FOLDER_TREE_URI = "folder_tree_uri"

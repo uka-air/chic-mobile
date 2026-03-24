@@ -18,12 +18,9 @@
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/chic_black"
-            android:contentDescription="@string/splash_logo_placeholder"
             android:padding="24dp"
             android:scaleType="centerInside"
-            android:src="@android:drawable/sym_def_app_icon"
-            app:tint="@color/chic_white" />
+            android:src="@drawable/logo"/>
     </FrameLayout>
 
     <TextView
@@ -34,14 +31,5 @@
         android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
         android:textColor="@color/chic_black"
         android:textStyle="bold" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="@string/splash_logo_placeholder"
-        android:textColor="@color/chic_gray"
-        android:textSize="14sp" />
 
 </LinearLayout>
