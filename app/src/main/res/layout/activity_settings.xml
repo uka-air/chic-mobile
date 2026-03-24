@@ -41,9 +41,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:background="@drawable/bg_textbox_solid_border"
             android:hint="@string/upload_interval_hint"
             android:inputType="number"
-            android:backgroundTint="@color/chic_white"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="10dp"
             android:textColor="@color/chic_black"
             android:textColorHint="@color/chic_gray" />
 

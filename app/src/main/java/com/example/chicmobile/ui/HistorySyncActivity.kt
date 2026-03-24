@@ -52,7 +52,8 @@ class HistorySyncActivity : AppCompatActivity() {
             append("อัปโหลดล่าสุด: $lastRun")
         }
 
-        renderHistoryTable(config.getSyncHistory())
+        val uploadedHistory = config.getSyncHistory().filter { it.totalCount > 0 }
+        renderHistoryTable(uploadedHistory)
     }
 
     private fun renderHistoryTable(entries: List<SyncHistoryEntry>) {
@@ -67,7 +68,7 @@ class HistorySyncActivity : AppCompatActivity() {
         if (entries.isEmpty()) {
             binding.historyTable.addView(
                 createTableRow(
-                    columns = listOf("ยังไม่มีประวัติ", "-", "-", "-", "-"),
+                    columns = listOf("ยังไม่มีประวัติอัปโหลดไฟล์", "-", "-", "-", "-"),
                     isHeader = false,
                 )
             )
