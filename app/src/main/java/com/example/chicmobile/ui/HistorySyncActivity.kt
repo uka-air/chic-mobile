@@ -27,15 +27,6 @@ class HistorySyncActivity : AppCompatActivity() {
         config = AppConfig.getInstance(this)
 
         binding.btnBack.setOnClickListener { finish() }
-        binding.btnSyncNow.setOnClickListener {
-            if (!config.setupComplete || !config.isConfigValid()) {
-                Toast.makeText(this, "กรุณาตั้งค่าก่อน", Toast.LENGTH_LONG).show()
-                return@setOnClickListener
-            }
-            WorkScheduler.runNow(this)
-            Toast.makeText(this, "เพิ่มคิวอัปโหลดแล้ว", Toast.LENGTH_SHORT).show()
-            refreshContent()
-        }
     }
 
     override fun onResume() {

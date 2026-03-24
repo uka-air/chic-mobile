@@ -27,15 +27,6 @@
             android:textSize="14sp" />
 
         <Button
-            android:id="@+id/btnSyncNow"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/chic_white"
-            android:text="อัปโหลดทันที"
-            android:textColor="@color/chic_black" />
-
-        <Button
             android:id="@+id/btnBack"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ตัวอัปโหลด Chic Mobile</string>
+    <string name="app_name">Chic Uploader </string>
     <string name="title_settings">การตั้งค่า</string>
     <string name="splash_logo_placeholder">Logo placeholder - replace with your final logo asset later</string>
     <string name="uploader_status">สถานะตัวอัปโหลด</string>

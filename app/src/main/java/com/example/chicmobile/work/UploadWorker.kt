@@ -118,7 +118,7 @@ class UploadWorker(
         config.appendSyncHistory(
             SyncHistoryEntry(
                 timestamp = completedAt,
-                title = if (failureCount == 0) "Background upload completed / อัปโหลดเบื้องหลังเสร็จสิ้น" else "Background upload completed with issues / อัปโหลดเบื้องหลังเสร็จสิ้นแต่มีปัญหา",
+                title = if (failureCount == 0) "อัปโหลดเบื้องหลังเสร็จสิ้น" else "อัปโหลดเบื้องหลังเสร็จสิ้นแต่มีปัญหา",
                 details = status,
                 successCount = successCount,
                 failureCount = failureCount,
