@@ -56,6 +56,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun loadValues() = with(binding) {
         edtPhoneNumber.setText(config.phoneNumber)
         edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
+        edtUploadEndpoint.setText(config.uploadEndpoint)
         txtFolderPath.text = getString(R.string.folder_path_template, config.folderPath)
         txtFolderPermission.text = if (config.folderTreeUri.isNotBlank()) {
             getString(R.string.saf_permission_granted, config.folderTreeUri)
@@ -76,8 +77,14 @@ class SettingsActivity : AppCompatActivity() {
             return
         }
 
+        if (edtUploadEndpoint.text.toString().isBlank()) {
+            Toast.makeText(this@SettingsActivity, getString(R.string.upload_endpoint_required), Toast.LENGTH_LONG).show()
+            return
+        }
+
         config.phoneNumber = edtPhoneNumber.text.toString()
         config.uploadIntervalMinutes = interval
+        config.uploadEndpoint = edtUploadEndpoint.text.toString()
         config.extensionFilter = "m4a"
 
         if (!config.isConfigValid()) {
