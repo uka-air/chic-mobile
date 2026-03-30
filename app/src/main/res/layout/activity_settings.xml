@@ -64,6 +64,19 @@
             android:textColorHint="@color/chic_gray" />
 
         <EditText
+            android:id="@+id/edtServerBaseUrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/bg_textbox_solid_border"
+            android:hint="@string/server_base_url_hint"
+            android:inputType="textUri"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="5dp"
+            android:textColor="@color/chic_black"
+            android:textColorHint="@color/chic_gray" />
+
+        <EditText
             android:id="@+id/edtUploadEndpoint"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
