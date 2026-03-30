@@ -21,7 +21,6 @@
     <string name="phone_number_hint">เบอร์โทรศัพท์</string>
     <string name="upload_interval_hint">ช่วงเวลาอัปโหลด (นาที)</string>
     <string name="server_base_url_hint">Base URL เซิร์ฟเวอร์ (เช่น https://example.com)</string>
-    <string name="upload_endpoint_hint">URL ปลายทางอัปโหลด (เช่น api/v1/raw_audios)</string>
     <string name="save">บันทึก</string>
     <string name="storage_permission_required">จำเป็นต้องมีสิทธิ์เข้าถึงที่เก็บข้อมูลเพื่อสแกนไฟล์บันทึกการโทร</string>
     <string name="grant_permission_try_again">โปรดให้สิทธิ์เข้าถึงที่เก็บข้อมูลแล้วลองอีกครั้ง</string>
@@ -32,7 +31,6 @@
     <string name="pick_folder_once">โปรดเลือกโฟลเดอร์หนึ่งครั้งเพื่อให้มีสิทธิ์สแกนและลบ</string>
     <string name="server_base_url_required">โปรดระบุ Base URL เซิร์ฟเวอร์</string>
     <string name="server_base_url_invalid">Base URL ต้องขึ้นต้นด้วย http:// หรือ https://</string>
-    <string name="upload_endpoint_required">โปรดระบุ URL ปลายทางอัปโหลด</string>
     <string name="pick_valid_folder">โปรดเลือกโฟลเดอร์ที่ถูกต้อง</string>
     <string name="settings_saved">บันทึกการตั้งค่าแล้ว</string>
 </resources>
