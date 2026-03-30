@@ -56,6 +56,7 @@ class SettingsActivity : AppCompatActivity() {
     private fun loadValues() = with(binding) {
         edtPhoneNumber.setText(config.phoneNumber)
         edtIntervalMinutes.setText(config.uploadIntervalMinutes.toString())
+        edtServerBaseUrl.setText(config.serverBaseUrl)
         txtFolderPath.text = getString(R.string.folder_path_template, config.folderPath)
         txtFolderPermission.text = if (config.folderTreeUri.isNotBlank()) {
             getString(R.string.saf_permission_granted, config.folderTreeUri)
@@ -76,8 +77,20 @@ class SettingsActivity : AppCompatActivity() {
             return
         }
 
+        val serverBaseUrl = edtServerBaseUrl.text.toString()
+        if (serverBaseUrl.isBlank()) {
+            Toast.makeText(this@SettingsActivity, getString(R.string.server_base_url_required), Toast.LENGTH_LONG).show()
+            return
+        }
+
+        if (!serverBaseUrl.startsWith("http://") && !serverBaseUrl.startsWith("https://")) {
+            Toast.makeText(this@SettingsActivity, getString(R.string.server_base_url_invalid), Toast.LENGTH_LONG).show()
+            return
+        }
+
         config.phoneNumber = edtPhoneNumber.text.toString()
         config.uploadIntervalMinutes = interval
+        config.serverBaseUrl = serverBaseUrl
         config.extensionFilter = "m4a"
 
         if (!config.isConfigValid()) {
