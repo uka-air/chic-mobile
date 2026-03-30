@@ -202,7 +202,7 @@ class AppConfig private constructor(private val context: Context) {
         private const val MAX_UPLOADED_FINGERPRINTS = 2000
         private const val MAX_SYNC_HISTORY_ITEMS = 20
         private const val DEFAULT_FOLDER_PATH = "/storage/emulated/0/Recordings/Record/Call"
-        private const val DEFAULT_SERVER_BASE_URL = "https://chic-conversation-analyzer.onrender.com"
+        private const val DEFAULT_SERVER_BASE_URL = "https://chic-call-tracker-a7d61983d696.herokuapp.com"
         private const val DEFAULT_UPLOAD_ENDPOINT = "api/v1/raw_audios"
 
         @Volatile

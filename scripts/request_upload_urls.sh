@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PRESIGN_URL="https://chic-conversation-analyzer.onrender.com/api/v1/presigns"
-RAW_AUDIO_URL="https://chic-conversation-analyzer.onrender.com/api/v1/raw_audios"
+PRESIGN_URL="https://chic-call-tracker-a7d61983d696.herokuapp.com/api/v1/presigns"
+RAW_AUDIO_URL="https://chic-call-tracker-a7d61983d696.herokuapp.com/api/v1/raw_audios"
 
 presign_response="$(curl -sS -X POST "$PRESIGN_URL" -H 'Content-Type: application/json' -d '{}')"
 
